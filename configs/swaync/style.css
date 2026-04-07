@@ -1,0 +1,77 @@
+@define-color bg #242933;
+@define-color azul-acero #5e81ac;
+@define-color rojo-critico #bf616a;
+@define-color texto #d8dee9;
+
+* {
+    font-family: "Cinzel", "Serif";
+    font-weight: 500;
+}
+
+.notification {
+    background-color: @bg;
+    border: 2px solid @azul-acero;
+    border-radius: 4px;
+    color: @texto;
+    margin: 20px;
+}
+
+.notification.critical {
+    border-color: @rojo-critico;
+}
+
+/* --- ICONO Y CARÁTULA --- */
+.notification-content .image {
+    margin: 8px;
+    padding: 0;
+}
+
+.notification-content .image > image {
+    -gtk-icon-size: 30px;
+}
+
+image#notification-icon {
+    -gtk-icon-size: 30px;
+}
+
+.notification-default-icon {
+    -gtk-icon-size: 0px;
+}
+
+/* --- SOLUCIÓN DE CENTRADO DEFINITIVA --- */
+
+/* Forzamos al contenedor de texto a expandirse para que el centro sea el centro real */
+.notification-content .text-wrapper {
+    margin: 0px 10px;
+    padding: 0px;
+    /* Esto obliga al texto a ocupar el espacio restante y centrar */
+    min-width: 200px; 
+}
+
+.summary {
+    color: @azul-acero;
+    font-size: 13px;
+    padding-top: 5px;
+    /* Usamos ambos métodos de centrado de GTK */
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.notification.critical .summary {
+    color: @rojo-critico;
+}
+
+.body {
+    color: @texto;
+    font-size: 11px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.close-button {
+    background: @azul-acero;
+    color: @bg;
+    border-radius: 2px;
+}

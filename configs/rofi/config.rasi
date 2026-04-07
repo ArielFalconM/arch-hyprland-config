@@ -1,0 +1,114 @@
+configuration {
+    modi: "drun";
+    show-icons: true;
+    icon-theme: "Papirus";
+    drun-display-format: "{name}";
+    cycle: false;
+}
+
+/* =========================
+   🎨 Paleta Nord
+   ========================= */
+* {
+    azul-oscuro: #3b4252;
+    fondo-ventana: #2e3440;
+    texto: #d8dee9;
+    seleccion: #88c0d0;
+    borde: #81a1c1;
+    separador: #4c566a;
+
+    background-color: transparent;
+    text-color: @texto;
+    font: "Sans 10";
+}
+
+/* =========================
+   🪟 Ventana
+   ========================= */
+window {
+    width: 30%;
+    background-color: @fondo-ventana;
+    border: 2px;
+    border-color: @borde;
+    border-radius: 10px;
+}
+
+/* =========================
+   Layout
+   ========================= */
+mainbox {
+    children: [ inputbar, listview ];
+    padding: 10px;
+    spacing: 8px;
+}
+
+/* =========================
+   🔍 Input bar
+   ========================= */
+inputbar {
+    background-color: @azul-oscuro;
+    border-radius: 8px;
+    padding: 10px 14px;
+    children: [ entry ];
+}
+
+/* Campo de búsqueda */
+entry {
+    text-color: @texto;
+    vertical-align: 0.5;
+    padding: 0px;
+    margin: 0px;
+    placeholder: "Search…";
+    placeholder-color: @seleccion;
+}
+
+/* =========================
+   📋 Lista de apps
+   ========================= */
+listview {
+    lines: 7;
+    fixed-height: true;
+    spacing: 6px;
+    padding: 5px;
+    scrollbar: true;
+    border: 1px 0px 0px 0px;
+    border-color: @separador;
+}
+
+/* =========================
+   📜 Scrollbar
+   ========================= */
+scrollbar {
+    width: 6px;
+    handle-color: @seleccion;
+    background-color: @azul-oscuro;
+    border-radius: 3px;
+}
+
+/* =========================
+   📦 Elementos
+   ========================= */
+element {
+    padding: 8px 12px;
+    border-radius: 6px;
+}
+
+/* Normal */
+element normal.normal,
+element alternate.normal {
+    background-color: @azul-oscuro;
+    text-color: @texto;
+}
+
+/* Seleccionado */
+element selected.normal {
+    background-color: @seleccion;
+    text-color: #2e3440;
+}
+
+/* Íconos y texto alineados */
+element-icon, element-text {
+    vertical-align: 0.5;
+    text-color: inherit;
+}
+

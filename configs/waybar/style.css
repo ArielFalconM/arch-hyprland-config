@@ -1,0 +1,110 @@
+* {
+   font-family: "JetBrainsMono Nerd Font", monospace;
+   font-size: 13px;
+   border: none;
+   border-radius: 0;
+}
+
+window#waybar {
+   background-color: rgba(20, 20, 24, 0.35);
+   border: none;
+   box-shadow: none;
+   color: #e5e9f0;
+}
+
+#workspaces button {
+    color: #ffffff;
+    padding: 0 4px;
+    background: transparent;
+    box-shadow: none;
+    text-shadow: none;
+    border: none;
+    border-radius: 0;
+}
+
+#workspaces button:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #e5e9f0;
+    border-radius: 6px;
+    box-shadow: none;
+    text-shadow: none;
+    transition: background 0.2s ease;
+}
+
+#workspaces button.active {
+    color: #e9c274;
+    font-size: 18px;
+}
+
+#workspaces button.urgent {
+    color: #bf616a;
+}
+
+/* --- MÓDULOS DE ESTADO --- */
+  #clock { color: #e5e9f0}
+
+  /* Audio */
+    #pulseaudio {color: #bf616a}
+    #pulseaudio.zero {color: #aeb3bb}
+    #pulseaudio.high {color: #e1c66e}
+
+  /* Temperatura */
+    #temperature {color: #d0be70}
+    #temperature.critical {color: #bf616a}
+
+  /* NetWork */
+    #network {color: #88c0d0}
+    #network.disconnected {color: #bf616a}
+    #network.disabled {color: #aeb3bb}
+
+  /* Bateria */
+    #battery {color: #a3be8c}
+    #battery.warning {color: #ebcb8b}
+    #battery.critical {color: #bf616a}
+
+  /* Power-Profiles */
+    #power-profiles-daemon.power-saver {color: #5fc382}
+    #power-profiles-daemon.balanced {color: #a25db9}
+    #power-profiles-daemon.performance {color: #bf616a}
+
+  /* Bluetooth */
+    #custom-bluetooth.enabled {color: #88c0d0}
+    #custom-bluetooth.disabled {color: #aeb3bb}
+    #custom-bluetooth.connected {
+        color: #88c0d0;
+        font-size: 16px;
+    }
+
+  /* Spotify */
+    #custom-spotify-tray {
+       color: #1db954;
+       font-size: 16px;
+    }
+    #custom-spotify-tray.stopped {
+       padding: 0;
+       margin: 0;
+       font-size: 0;
+    }
+
+/* --- ESTRUCTURA Y HOVER --- */
+  #workspaces, #clock, #pulseaudio, #custom-bluetooth, #temperature, 
+  #network, #battery, #power-profiles-daemon, #tray, #custom-spotify-tray {
+      padding: 0 8px;
+  }
+
+  #clock:hover, #pulseaudio:hover, #custom-bluetooth:hover, #temperature:hover, 
+  #network:hover, #battery:hover, #power-profiles-daemon:hover, #custom-spotify-tray:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+  }
+
+
+/* --- CALENDARIO DESPLEGABLE --- */
+tooltip {
+    background-color: rgba(20, 20, 24, 0.95);
+    border: 1px solid #74c0e9;
+}
+tooltip label {
+    font-size: 15px; 
+    padding: 5px;
+}

@@ -1,0 +1,28 @@
+# --- Estética y Transparencia ---
+background_opacity 0.8
+# Esto hace que la transparencia se vea mejor en Wayland
+dynamic_background_opacity yes
+
+# --- Fuentes ---
+# Si instalaste la fuente que te dije antes:
+font_family      JetBrainsMono Nerd Font
+font_size        11.0
+
+# --- Ventana y Bordes ---
+window_padding_width 10
+confirm_os_window_close 0
+
+# --- Cursor ---
+cursor_shape beam
+cursor_blink_interval 0.5
+
+# --- Colores (Tema Minimalista) ---
+# Puedes cambiar estos luego, pero estos son muy legibles
+# foreground #dddddd
+# background #111111
+
+
+# BEGIN_KITTY_THEME
+# ENCOM
+include current-theme.conf
+# END_KITTY_THEME

@@ -1,0 +1,114 @@
+# --- SISTEMA BASE Y DRIVERS ---
+linux
+linux-headers
+linux-firmware
+amd-ucode
+base
+base-devel
+grub
+efibootmgr
+os-prober
+sudo
+zram-generator
+
+# --- ENTORNO GRÁFICO (HYPRLAND) ---
+hyprland
+hyprpaper
+hyprlock
+hypridle
+waybar
+sddm
+xdg-desktop-portal-hyprland
+xdg-desktop-portal-gtk
+qt5-wayland
+qt6-wayland
+uwsm
+
+# --- HERRAMIENTAS DE ESCRITORIO ---
+rofi
+wofi
+swaync
+slurp
+grim
+swappy
+nwg-look
+polkit-kde-agent
+wl-clipboard
+libnotify
+gnome-keyring
+seahorse
+
+# --- AUDIO, VIDEO Y MULTIMEDIA ---
+pipewire
+pipewire-pulse
+pipewire-alsa
+pipewire-jack
+wireplumber
+gst-plugin-pipewire
+pavucontrol
+imv
+eog
+mpv
+
+# --- DRIVERS Y HARDWARE ---
+bluez
+bluez-utils
+networkmanager
+network-manager-applet
+iwd
+wpa_supplicant
+wireless_tools
+vulkan-intel
+vulkan-radeon
+intel-media-driver
+libva-intel-driver
+xf86-video-amdgpu
+sof-firmware
+smartmontools
+power-profiles-daemon
+brightnessctl
+
+# --- TERMINAL Y EDITORES ---
+kitty
+neovim
+code
+
+# --- APLICACIONES DE USUARIO ---
+obsidian
+godot
+steam
+zathura
+zathura-pdf-mupdf
+foliate
+nemo
+
+# --- UTILIDADES DE SISTEMA ---
+git
+github-cli
+wget
+ncdu
+htop
+unzip
+ntfs-3g
+xdg-utils
+flatpak
+expac
+
+# --- FUENTES Y TEMAS ---
+ttf-jetbrains-mono-nerd
+ttf-nerd-fonts-symbols-common
+otf-font-awesome
+woff2-font-awesome
+materia-gtk-theme
+papirus-icon-theme
+gnome-themes-extra
+icon-library
+grub-theme-vimix
+
+# --- DEPENDENCIAS DE DESARROLLO / PYTHON ---
+python-pip
+python-pillow
+python-evdev
+imagemagick
+libavif
+libheif
