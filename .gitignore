@@ -1,0 +1,7 @@
+# Ignorar backups generados por deploy.sh
+*.bak_*
+
+# Ignorar otros backups genéricos
+*.bak
+*.backup
+*~
