@@ -6,10 +6,13 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-echo -e "${BLUE}=== Construyendo entorno Arch Linux (SRE Mode) ===${NC}\n"
+echo -e "${BLUE}=== Construyendo entorno Arch Linux ===${NC}\n"
 
-# Pedir permisos de administrador
+# Solicitar privilegios de administrador
 sudo -v
+
+# Mantener los privilegios de sudo activos durante la ejecución del script
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 # ---------------------------------------------------------
 # 1. PREPARACIÓN DEL SISTEMA Y GESTOR AUR
@@ -71,4 +74,4 @@ else
 fi
 
 echo -e "\n${GREEN}=== ARQUITECTURA DESPLEGADA CON ÉXITO ===${NC}"
-echo "El sistema está listo. Reinicia la máquina para aplicar todos los cambios."
+echo "El sistema está listo. Reiniciar la máquina para aplicar todos los cambios."
