@@ -2,6 +2,6 @@
 *.bak_*
 
 # Ignorar otros backups genéricos
-*.bak
+*.bak_
 *.backup
 *~

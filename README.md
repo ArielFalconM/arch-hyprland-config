@@ -7,10 +7,12 @@ La pieza central de este repositorio es el script `deploy.sh`. A diferencia de l
 
 - **Despliegue Atómico:** Enlaza carpetas completas para componentes donde la configuración es 100% estática (Hyprland, Waybar, Kitty, Rofi, Neovim).
 - **Despliegue Híbrido:** Para aplicaciones que generan datos volátiles o sesiones activas (**Obsidian, Code - OSS, OneDrive**), el script solo enlaza los archivos de configuración específicos (.json, .conf), protegiendo las bases de datos, cachés y tokens locales del usuario.
-- **Seguridad Integrada:** Antes de realizar cualquier cambio, el sistema detecta si existen archivos reales y crea backups automáticos con *timestamp* (`.bak_YYYYMMDD_HHMMSS`).
+- **Despliegue del Sistema:** Copia de forma segura y comprobada configuraciones que requieren privilegios de administrador (como el gestor de sesión), usando lógica idempotente para no duplicar procesos.
+- **Seguridad Integrada:** Antes de realizar cualquier cambio, el sistema detecta si existen archivos reales y crea backups automáticos con *timestamp* (`.bak_YYYYMMDD_HHMMSS`) gestionando los permisos de sudo de forma inteligente.
 
 ## 📦 Stack Tecnológico
 - **WM:** [Hyprland](https://hyprland.org/) (Wayland)
+- **Gestor de Sesión:** SDDM (Tema Sugar Candy)
 - **Barra:** Waybar (CSS personalizado)
 - **Terminal:** Kitty
 - **Notificaciones:** SwayNC + Scripts personalizados (Bash)
@@ -24,6 +26,7 @@ arch-setup/
 ├── configs/          # Archivos de configuración destinados a ~/.config
 ├── scripts/          # Scripts de utilidad (Bluetooth, Wifi, Spotify)
 │   └── laptop_scripts/ # Lógica de energía y batería para laptops
+├── system/           # Configuraciones a nivel de sistema que requieren sudo
 ├── wallpapers/       # Gestión de fondos de pantalla
 ├── install.sh        # Instalador de dependencias y paquetes (Pacman/AUR)
-└── deploy.sh         # Motor de sincronización por enlaces simbólicos
+└── deploy.sh         # Motor de sincronización por enlaces y copias del sistema

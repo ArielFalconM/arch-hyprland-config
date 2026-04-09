@@ -8,9 +8,10 @@ TARGET_DIR="$HOME/.config"
 SCRIPTS_DIR="$REPO_ROOT/scripts"
 BIN_TARGET="$HOME/.local/bin"
 
-# Nueva configuración para imágenes
+# Nueva configuración para imágenes y sistema
 WALLPAPERS_DIR="$REPO_ROOT/wallpapers"
 PICTURES_TARGET="$HOME/Pictures"
+SYSTEM_DIR="$REPO_ROOT/system"
 
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
@@ -22,7 +23,11 @@ backup_if_real() {
     local path=$1
     if [ -e "$path" ] && [ ! -L "$path" ]; then
         echo "  [WARN] Archivo real detectado. Creando backup: $(basename "$path").bak_$TIMESTAMP"
-        mv "$path" "$path.bak_$TIMESTAMP"
+        if [ -w "$(dirname "$path")" ]; then
+            mv "$path" "$path.bak_$TIMESTAMP"
+        else
+            sudo mv "$path" "$path.bak_$TIMESTAMP"
+        fi
     fi
 }
 
@@ -73,6 +78,8 @@ if [ -d "$CONFIG_DIR" ]; then
     cd "$CONFIG_DIR" || exit
 
     for item in *; do
+        [ -e "$item" ] || continue
+
         if [ "$item" == "laptop_configs" ]; then
             if [[ ! "$IS_LAPTOP" =~ ^[Yy]$ ]]; then
                 echo ">> Saltando $item (Excluido por el usuario)"
@@ -112,6 +119,8 @@ if [ -d "$SCRIPTS_DIR" ]; then
     cd "$SCRIPTS_DIR" || exit
 
     for script in *; do
+        [ -e "$script" ] || continue
+
         if [ "$script" == "laptop_scripts" ]; then
             if [[ ! "$IS_LAPTOP" =~ ^[Yy]$ ]]; then
                 echo ">> Saltando scripts de laptop (Excluido por el usuario)"
@@ -120,7 +129,9 @@ if [ -d "$SCRIPTS_DIR" ]; then
             
             for laptop_script in "$SCRIPTS_DIR/laptop_scripts/"*; do
                 [ -e "$laptop_script" ] || continue
-                base_name=$(basename "$laptop_script")
+                
+                base_name=$(basename "$laptop_script") 
+                
                 echo ">> Procesando Script de Laptop: $base_name"
                 backup_if_real "$BIN_TARGET/$base_name"
                 ln -sf "$laptop_script" "$BIN_TARGET/$base_name"
@@ -147,6 +158,8 @@ if [ -d "$WALLPAPERS_DIR" ]; then
     cd "$WALLPAPERS_DIR" || exit
 
     for wp in *; do
+        [ -e "$wp" ] || continue
+
         if [ -f "$wp" ]; then
             echo ">> Procesando Wallpaper: $wp"
             backup_if_real "$PICTURES_TARGET/$wp"
@@ -154,6 +167,56 @@ if [ -d "$WALLPAPERS_DIR" ]; then
             echo "    [INFO] Imagen vinculada con éxito."
         fi
     done
+fi
+
+# ---------------------------------------------------------
+# FASE 4: DESPLIEGUE DEL SISTEMA
+# ---------------------------------------------------------
+if [ -d "$SYSTEM_DIR" ]; then
+    echo -e "\n=== FASE 4: INYECTANDO CONFIGURACIONES DEL SISTEMA ==="
+    echo ">> Esta fase requiere permisos de administrador para modificar el sistema."
+    
+    # --- Configuración de SDDM ---
+    if [ -d "$SYSTEM_DIR/sddm" ]; then
+        echo ">> Configurando gestor de sesión (SDDM)..."
+        
+        # 1. Copiar el archivo principal que activa el tema
+        if [ -f "$SYSTEM_DIR/sddm/sugar-candy.conf" ]; then
+            sudo mkdir -p /etc/sddm.conf.d
+            # 'cmp -s' compara los archivos y solo hace el backup/copia si son diferentes
+            if ! cmp -s "$SYSTEM_DIR/sddm/sugar-candy.conf" "/etc/sddm.conf.d/sugar-candy.conf" 2>/dev/null; then
+                backup_if_real "/etc/sddm.conf.d/sugar-candy.conf"
+                sudo cp "$SYSTEM_DIR/sddm/sugar-candy.conf" /etc/sddm.conf.d/
+                echo "    [INFO] Archivo de activación de tema copiado."
+            fi
+        fi
+
+        # 2. Copiar configuraciones específicas del tema Sugar Candy
+        SUGAR_DIR="/usr/share/sddm/themes/sugar-candy"
+        if [ -d "$SUGAR_DIR" ]; then
+            # Copiar la configuración del tema
+            if [ -f "$SYSTEM_DIR/sddm/theme.conf" ]; then
+                if ! cmp -s "$SYSTEM_DIR/sddm/theme.conf" "$SUGAR_DIR/theme.conf" 2>/dev/null; then
+                    backup_if_real "$SUGAR_DIR/theme.conf"
+                    sudo cp "$SYSTEM_DIR/sddm/theme.conf" "$SUGAR_DIR/"
+                    echo "    [INFO] Configuración de Sugar Candy copiada."
+                fi
+            fi
+            
+            # Copiar el wallpaper al directorio del tema
+            if [ -f "$SYSTEM_DIR/sddm/sddm_wallpaper.jpg" ]; then
+                if ! cmp -s "$SYSTEM_DIR/sddm/sddm_wallpaper.jpg" "$SUGAR_DIR/Backgrounds/sddm_wallpaper.jpg" 2>/dev/null; then
+                    backup_if_real "$SUGAR_DIR/Backgrounds/sddm_wallpaper.jpg"
+                    sudo mkdir -p "$SUGAR_DIR/Backgrounds"
+                    sudo cp "$SYSTEM_DIR/sddm/sddm_wallpaper.jpg" "$SUGAR_DIR/Backgrounds/"
+                    echo "    [INFO] Wallpaper de login copiado."
+                fi
+            fi
+        else
+            echo "    [WARN] El tema Sugar Candy no está en $SUGAR_DIR."
+            echo "    Asegúrate de que el paquete de AUR se haya instalado correctamente."
+        fi
+    fi
 fi
 
 echo "--------------------------------------------------------"

@@ -20,6 +20,10 @@ waybar
 sddm
 xdg-desktop-portal-hyprland
 xdg-desktop-portal-gtk
+qt5-graphicaleffects
+qt5-quickcontrols
+qt5-quickcontrols2
+qt5-svg
 qt5-wayland
 qt6-wayland
 uwsm
