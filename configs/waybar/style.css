@@ -56,6 +56,7 @@ window#waybar {
     #network {color: #88c0d0}
     #network.disconnected {color: #bf616a}
     #network.disabled {color: #aeb3bb}
+    #network.linked {color: #bf616a}
 
   /* Bateria */
     #battery {color: #a3be8c}
@@ -107,4 +108,40 @@ tooltip {
 tooltip label {
     font-size: 15px; 
     padding: 5px;
+}
+
+
+
+/* --- PÍLDORA DESPLEGABLE (POWER Y STATS) --- */
+#group-power {
+    background-color: rgba(255, 255, 255, 0.05); /* Fondo para la píldora */
+    border-radius: 15px; /* Bordes redondeados para efecto píldora */
+    padding: 0 4px;
+    margin: 0 4px;
+}
+
+#custom-power {
+    color: #bf616a; 
+    font-size: 16px;
+    padding: 0 8px;
+}
+
+#cpu {
+    color: #905db0;
+    padding: 0 6px;
+}
+
+#memory {
+    color: #a3be8c;
+    padding: 0 6px;
+}
+
+
+#custom-power:hover, #cpu:hover, #memory:hover {
+    background-color: transparent;
+}
+
+#disk {
+    color: #a2a5c8; 
+    padding: 0 6px;
 }

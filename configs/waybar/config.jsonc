@@ -7,11 +7,11 @@
   "modules-left": ["hyprland/workspaces"],
   "modules-center": ["clock"],
   "modules-right": [
+    "group/power",
     "pulseaudio",
     "custom/bluetooth",
     "power-profiles-daemon",
     "network",
-    "temperature",
     "battery",
     "custom/spotify-tray",
     "tray"
@@ -25,8 +25,9 @@
         "*": 5 // Siempre 5 puntos visibles.
     },
     "format-icons": {
-        "active": "󰮯",
-        "default": ""
+      "active": "󰮯",
+      "default": "<span font='6'></span>",
+      "empty": ""
     }
 },
 
@@ -61,12 +62,53 @@
     "tooltip": false
   },
 
-  "temperature": {
-    "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
-    "critical-threshold": 75,
-    "format": "{icon} {temperatureC}°C",
-    "format-icons": ["", "", ""]
-  },
+/* --- CONFIGURACIÓN DEL GRUPO DE ENERGÍA Y STATS --- */
+"group/power": {
+    "orientation": "inherit",
+    "drawer": {
+        "transition-duration": 500,
+        "children-class": "stats",
+        "transition-left-to-right": false
+    },
+    "modules": [
+        "custom/power", // Gatillo
+        "memory",
+        "disk",
+        "cpu",
+        "temperature"
+    ]
+},
+
+"custom/power": {
+    "format": "",
+    "on-click": "wlogout -b 4",
+    "tooltip-format": "Apagar / Reiniciar / Cerrar Sesión"
+},
+
+"cpu": {
+    "format": " {usage}%",
+    "tooltip-format": "Uso Total de CPU"
+},
+
+"memory": {
+    "format": " {}%",
+    "tooltip-format": "Uso de Memoria (RAM)"
+},
+
+
+"temperature": {
+    "hwmon-path": "/sys/class/hwmon/hwmon3/temp1_input",
+    "critical-threshold": 80,
+    "format": " {temperatureC}°C",
+    "tooltip-format": "Temperatura del Sistema"
+},
+
+
+"disk": {
+    "format": "󰋊 {percentage_used}%",
+    "path": "/",
+    "tooltip-format": "Espacio usado en Disco (Raíz)"
+},
 
   "pulseaudio": {
     "format": "{icon} {volume}%",
@@ -84,12 +126,13 @@
 "network": {
     "format-wifi": " ",
     "format-ethernet": "󰈀",
+    "format-linked": "󰈀",
     "format-disconnected": "󰖪", 
     "tooltip-format": "{ifname} via {gwaddr} 󰊗",
     "tooltip-format-wifi": "SSID: {essid}\nSeñal: {signalStrength}%",
     "tooltip-format-ethernet": "Interface: {ifname}\nIP: {ipaddr}",
     "tooltip-format-disconnected": "Desconectado",
-    "on-click": "nm-connection-editor"
+    "on-click": "kitty -e nmtui"
   },
 
   "battery": {
