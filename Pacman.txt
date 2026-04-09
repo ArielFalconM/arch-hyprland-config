@@ -29,7 +29,7 @@ qt6-wayland
 uwsm
 
 # --- HERRAMIENTAS DE ESCRITORIO ---
-rofi
+rofi-wayland
 wofi
 swaync
 slurp

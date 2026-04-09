@@ -1,7 +1,6 @@
 # --- APLICACIONES PRINCIPALES ---
 brave-bin
 spotify
-onedrive-abraunegg
 
 # --- UTILIDADES Y TEMAS ---
 catppuccin-gtk-theme-mocha

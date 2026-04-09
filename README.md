@@ -6,7 +6,7 @@ Repositorio personal de configuraciones (**dotfiles**) para Arch Linux, diseñad
 La pieza central de este repositorio es el script `deploy.sh`. A diferencia de los gestores de dotfiles convencionales, este motor utiliza una lógica selectiva para mantener el sistema limpio y funcional:
 
 - **Despliegue Atómico:** Enlaza carpetas completas para componentes donde la configuración es 100% estática (Hyprland, Waybar, Kitty, Rofi, Neovim).
-- **Despliegue Híbrido:** Para aplicaciones que generan datos volátiles o sesiones activas (**Obsidian, Code - OSS, OneDrive**), el script solo enlaza los archivos de configuración específicos (.json, .conf), protegiendo las bases de datos, cachés y tokens locales del usuario.
+- **Despliegue Híbrido:** Para aplicaciones que generan datos volátiles o sesiones activas (**Obsidian, Code - OSS**), el script solo enlaza los archivos de configuración específicos (.json, .conf), protegiendo las bases de datos, cachés y tokens locales del usuario.
 - **Despliegue del Sistema:** Copia de forma segura y comprobada configuraciones que requieren privilegios de administrador (como el gestor de sesión), usando lógica idempotente para no duplicar procesos.
 - **Seguridad Integrada:** Antes de realizar cualquier cambio, el sistema detecta si existen archivos reales y crea backups automáticos con *timestamp* (`.bak_YYYYMMDD_HHMMSS`) gestionando los permisos de sudo de forma inteligente.
 

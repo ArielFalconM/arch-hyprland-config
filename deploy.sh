@@ -10,12 +10,12 @@ BIN_TARGET="$HOME/.local/bin"
 
 # Nueva configuración para imágenes y sistema
 WALLPAPERS_DIR="$REPO_ROOT/wallpapers"
-PICTURES_TARGET="$HOME/Pictures"
+WALLPAPER_TARGET="$HOME/.local/share/wallpapers"
 SYSTEM_DIR="$REPO_ROOT/system"
 
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
-HYBRID_CONFIGS=("onedrive" "Code - OSS" "obsidian")
+HYBRID_CONFIGS=("Code - OSS" "obsidian")
 
 # === FUNCIONES DE UTILIDAD ===
 
@@ -150,20 +150,21 @@ if [ -d "$SCRIPTS_DIR" ]; then
 fi
 
 # ---------------------------------------------------------
-# FASE 3: DESPLIEGUE DE WALLPAPERS (~/Pictures)
+# FASE 3: DESPLIEGUE DE WALLPAPERS (~/.local/share/wallpapers)
 # ---------------------------------------------------------
 if [ -d "$WALLPAPERS_DIR" ]; then
     echo -e "\n=== FASE 3: INYECTANDO WALLPAPERS ==="
-    mkdir -p "$PICTURES_TARGET"
+    # Creamos la ruta genérica si no existe
+    mkdir -p "$WALLPAPER_TARGET"
     cd "$WALLPAPERS_DIR" || exit
 
     for wp in *; do
-        [ -e "$wp" ] || continue
+        [ -e "$wp" ] || continue # Evita errores si la carpeta está vacía
 
         if [ -f "$wp" ]; then
             echo ">> Procesando Wallpaper: $wp"
-            backup_if_real "$PICTURES_TARGET/$wp"
-            ln -sf "$WALLPAPERS_DIR/$wp" "$PICTURES_TARGET/$wp"
+            backup_if_real "$WALLPAPER_TARGET/$wp"
+            ln -sf "$WALLPAPERS_DIR/$wp" "$WALLPAPER_TARGET/$wp"
             echo "    [INFO] Imagen vinculada con éxito."
         fi
     done

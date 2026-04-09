@@ -7,14 +7,14 @@
   "modules-left": ["hyprland/workspaces"],
   "modules-center": ["clock"],
   "modules-right": [
-    "group/power",
     "pulseaudio",
     "custom/bluetooth",
     "power-profiles-daemon",
     "network",
     "battery",
     "custom/spotify-tray",
-    "tray"
+    "tray",
+    "group/power"
   ],
 
 "hyprland/workspaces": {
@@ -80,9 +80,9 @@
 },
 
 "custom/power": {
-    "format": "",
+    "format": " ",
     "on-click": "wlogout -b 4",
-    "tooltip-format": "Apagar / Reiniciar / Cerrar Sesión"
+    "tooltip-format":"Power"
 },
 
 "cpu": {
@@ -92,7 +92,7 @@
 
 "memory": {
     "format": " {}%",
-    "tooltip-format": "Uso de Memoria (RAM)"
+    "tooltip-format": "Uso de Memoria"
 },
 
 
@@ -107,7 +107,7 @@
 "disk": {
     "format": "󰋊 {percentage_used}%",
     "path": "/",
-    "tooltip-format": "Espacio usado en Disco (Raíz)"
+    "tooltip-format": "Espacio usado en Disco"
 },
 
   "pulseaudio": {
@@ -126,14 +126,10 @@
 "network": {
     "format-wifi": " ",
     "format-ethernet": "󰈀",
-    "format-linked": "󰈀",
     "format-disconnected": "󰖪", 
-    "tooltip-format": "{ifname} via {gwaddr} 󰊗",
-    "tooltip-format-wifi": "SSID: {essid}\nSeñal: {signalStrength}%",
-    "tooltip-format-ethernet": "Interface: {ifname}\nIP: {ipaddr}",
-    "tooltip-format-disconnected": "Desconectado",
+    "tooltip-format": " {essid} ({signalStrength}%)",
     "on-click": "kitty -e nmtui"
-  },
+},
 
   "battery": {
     "interval": 1,

@@ -18,20 +18,21 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 # 1. PREPARACIÓN DEL SISTEMA Y GESTOR AUR
 # ---------------------------------------------------------
 echo -e "${BLUE}[1/4] Instalando dependencias base y yay...${NC}"
-sudo pacman -S --needed --noconfirm base-devel git
+sudo pacman -Syu --needed --noconfirm base-devel git
 
 if ! command -v yay &> /dev/null; then
     echo -e "${YELLOW}Compilando yay desde AUR...${NC}"
     git clone https://aur.archlinux.org/yay.git /tmp/yay
     cd /tmp/yay
     makepkg -si --noconfirm
+    cd - > /dev/null
     rm -rf /tmp/yay
 else
     echo -e "${GREEN}yay ya está instalado.${NC}"
 fi
 
 # ---------------------------------------------------------
-# 2. LECTURA DE LISTAS DE PAQUETES
+# 2. LECTURA Y LIMPIEZA DE LISTAS DE PAQUETES
 # ---------------------------------------------------------
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ARCHIVO_OFICIALES="$REPO_DIR/Pacman.txt"
@@ -42,17 +43,29 @@ if [ ! -f "$ARCHIVO_OFICIALES" ] || [ ! -f "$ARCHIVO_AUR" ]; then
     exit 1
 fi
 
-PAQUETES_OFICIALES=($(grep -v '^\s*#' "$ARCHIVO_OFICIALES" | grep -v '^\s*$'))
-PAQUETES_AUR=($(grep -v '^\s*#' "$ARCHIVO_AUR" | grep -v '^\s*$'))
+# sed elimina saltos de línea de Windows (\r), comentarios (#) y líneas vacías
+PAQUETES_OFICIALES=($(sed -e 's/\r//g' -e 's/#.*//' -e '/^$/d' "$ARCHIVO_OFICIALES"))
+PAQUETES_AUR=($(sed -e 's/\r//g' -e 's/#.*//' -e '/^$/d' "$ARCHIVO_AUR"))
 
 # ---------------------------------------------------------
-# 3. INSTALACIÓN DE SOFTWARE
+# 3. INSTALACIÓN DE SOFTWARE (SISTEMA DE RESCATE)
 # ---------------------------------------------------------
 echo -e "\n${BLUE}[2/4] Sincronizando e instalando repositorios oficiales...${NC}"
-sudo pacman -Syu --needed --noconfirm "${PAQUETES_OFICIALES[@]}"
+# Intento 1: Todos de golpe
+if ! sudo pacman -S --needed --noconfirm "${PAQUETES_OFICIALES[@]}"; then
+    echo -e "${YELLOW}[WARN] Algún paquete falló. Activando instalación uno a uno...${NC}"
+    for pkg in "${PAQUETES_OFICIALES[@]}"; do
+        sudo pacman -S --needed --noconfirm "$pkg" || echo -e "${RED}>> ERROR crítico con: $pkg${NC}"
+    done
+fi
 
 echo -e "\n${BLUE}[3/4] Construyendo e instalando paquetes de AUR...${NC}"
-yay -S --needed --noconfirm "${PAQUETES_AUR[@]}"
+if ! yay -S --needed --noconfirm "${PAQUETES_AUR[@]}"; then
+    echo -e "${YELLOW}[WARN] Algún paquete de AUR falló. Activando instalación uno a uno...${NC}"
+    for pkg in "${PAQUETES_AUR[@]}"; do
+        yay -S --needed --noconfirm "$pkg" || echo -e "${RED}>> ERROR crítico con: $pkg${NC}"
+    done
+fi
 
 # ---------------------------------------------------------
 # 4. HABILITAR SERVICIOS DEL SISTEMA
@@ -60,7 +73,7 @@ yay -S --needed --noconfirm "${PAQUETES_AUR[@]}"
 echo -e "\n${BLUE}[4/4] Levantando servicios del sistema...${NC}"
 sudo systemctl enable sddm
 sudo systemctl enable bluetooth
-systemctl --user enable onedrive
+# El servicio de OneDrive fue eliminado a petición.
 
 # ---------------------------------------------------------
 # 5. INYECCIÓN DE DOTFILES
