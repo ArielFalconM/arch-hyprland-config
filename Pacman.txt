@@ -13,7 +13,8 @@ zram-generator
 
 # --- ENTORNO GRÁFICO (HYPRLAND) ---
 hyprland
-hyprpaper
+#hyprpaper
+swaybg
 hyprlock
 hypridle
 waybar

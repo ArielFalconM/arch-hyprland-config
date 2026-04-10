@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # === CONFIGURACIÓN ===
-REPO_ROOT="$HOME/arch-setup"
+REPO_ROOT="$HOME/arch-hyprland-config"
 CONFIG_DIR="$REPO_ROOT/configs"
 TARGET_DIR="$HOME/.config"
 
@@ -57,7 +57,8 @@ deploy_atomic() {
 
     echo ">> Procesando Atómico: $folder"
     backup_if_real "$system_target"
-    ln -sf "$repo_source" "$system_target"
+    # Flag -n para evitar enlaces recursivos
+    ln -sfn "$repo_source" "$system_target" 
     echo "    [INFO] Carpeta vinculada con éxito."
 }
 
