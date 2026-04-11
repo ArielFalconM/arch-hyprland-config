@@ -13,7 +13,6 @@ zram-generator
 
 # --- ENTORNO GRÁFICO (HYPRLAND) ---
 hyprland
-#hyprpaper
 swaybg
 hyprlock
 hypridle
@@ -27,11 +26,9 @@ qt5-quickcontrols2
 qt5-svg
 qt5-wayland
 qt6-wayland
-uwsm
 
 # --- HERRAMIENTAS DE ESCRITORIO ---
 rofi-wayland
-wofi
 swaync
 slurp
 grim
@@ -52,7 +49,6 @@ wireplumber
 gst-plugin-pipewire
 pavucontrol
 imv
-eog
 mpv
 
 # --- DRIVERS Y HARDWARE ---
@@ -96,7 +92,6 @@ htop
 unzip
 ntfs-3g
 xdg-utils
-flatpak
 expac
 
 # --- FUENTES Y TEMAS ---
@@ -115,5 +110,3 @@ python-pip
 python-pillow
 python-evdev
 imagemagick
-libavif
-libheif

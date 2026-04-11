@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # === CONFIGURACIÓN ===
-REPO_ROOT="$HOME/arch-hyprland-config"
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONFIG_DIR="$REPO_ROOT/configs"
 TARGET_DIR="$HOME/.config"
 
@@ -153,6 +153,14 @@ fi
 # ---------------------------------------------------------
 # FASE 3: DESPLIEGUE DE WALLPAPERS (~/.local/share/wallpapers)
 # ---------------------------------------------------------
+
+# PREPARACIÓN DE CARPETAS DE USUARIO:
+echo -e "\n=== VERIFICANDO DIRECTORIOS BASE ==="
+SCREENSHOTS_DIR="$HOME/Pictures/Screenshots"
+
+mkdir -p "$SCREENSHOTS_DIR" 
+echo "    [INFO] Directorio de capturas asegurado en $SCREENSHOTS_DIR"
+
 if [ -d "$WALLPAPERS_DIR" ]; then
     echo -e "\n=== FASE 3: INYECTANDO WALLPAPERS ==="
     # Creamos la ruta genérica si no existe

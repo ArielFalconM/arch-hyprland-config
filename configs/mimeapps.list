@@ -3,13 +3,31 @@ image/png=imv-4.desktop;imv-3.desktop;imv-2.desktop;
 text/plain=code-oss.desktop;
 
 [Default Applications]
+
+# --- Imágenes (Visor: imv) ---
 image/gif=imv.desktop
 image/jpeg=imv.desktop
 image/png=imv-4.desktop;
 image/svg+xml=imv.desktop
 image/webp=imv.desktop
+image/bmp=imv.desktop
+
+# --- Videos y Audio (Reproductor: mpv) ---
+video/mp4=mpv.desktop
+video/x-matroska=mpv.desktop
+video/webm=mpv.desktop
+video/quicktime=mpv.desktop
+video/x-flv=mpv.desktop
+audio/mpeg=mpv.desktop
+audio/x-wav=mpv.desktop
+
+# --- Navegación Web y Enlaces ---
 text/html=brave-browser.desktop
 x-scheme-handler/about=brave-browser.desktop
 x-scheme-handler/http=brave-browser.desktop
 x-scheme-handler/https=brave-browser.desktop
 x-scheme-handler/unknown=brave-browser.desktop
+
+# --- Documentos y Libros ---
+application/pdf=org.pwmt.zathura.desktop
+application/epub+zip=com.github.johnfactotum.Foliate.desktop

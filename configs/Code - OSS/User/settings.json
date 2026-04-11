@@ -11,5 +11,6 @@
             "name": "Qt-5.15.18-linux-g++_from_PATH",
             "path": "/usr/bin/qmake"
         }
-    ]
+    ],
+    "workbench.secondarySideBar.defaultVisibility": "hidden"
 }

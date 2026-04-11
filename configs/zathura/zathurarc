@@ -1,0 +1,56 @@
+# ==========================================
+# ZATHURARC: MOTOR DE LECTURA
+# ==========================================
+
+# --- Comportamiento y Usabilidad ---
+set selection-clipboard clipboard
+set adjust-open "best-fit"
+set scroll-page-aware "true"
+set scroll-step 50
+set zoom-step 10
+set render-loading true
+
+# Oculta las barras de desplazamiento
+set guioptions "" 
+
+# --- Modo Recolor Automático ---
+set recolor true
+set recolor-keephue true
+
+# ==========================================
+# TEMA VISUAL: DARK 
+# ==========================================
+
+# Fondo base y texto general
+set default-bg                  "#1E1E2E"
+set default-fg                  "#CDD6F4"
+
+# Barra de estado inferior (Limpia y sutil)
+set statusbar-bg                "#181825"
+set statusbar-fg                "#BAC2DE"
+
+# Barra de comandos
+set inputbar-bg                 "#313244"
+set inputbar-fg                 "#CDD6F4"
+
+# Alertas y notificaciones emergentes
+set notification-bg             "#313244"
+set notification-fg             "#CDD6F4"
+set notification-error-bg       "#F38BA8"
+set notification-error-fg       "#1E1E2E"
+set notification-warning-bg     "#F9E2AF"
+set notification-warning-fg     "#1E1E2E"
+
+# Colores al buscar texto (Presiona '/')\
+set highlight-color             "rgba(245, 194, 231, 0.5)"
+set highlight-active-color      "rgba(203, 166, 247, 0.5)"
+
+# Autocompletado de comandos
+set completion-bg               "#313244"
+set completion-fg               "#CDD6F4"
+set completion-highlight-fg     "#1E1E2E"
+set completion-highlight-bg     "#89B4FA"
+
+# Inversión de colores para los PDFs
+set recolor-lightcolor          "#1E1E2E"
+set recolor-darkcolor           "#CDD6F4"
