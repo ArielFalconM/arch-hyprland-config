@@ -15,7 +15,7 @@ SYSTEM_DIR="$REPO_ROOT/system"
 
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
-HYBRID_CONFIGS=("Code - OSS" "obsidian")
+HYBRID_CONFIGS=("Code - OSS" "obsidian" "gtk-4.0")
 
 # === FUNCIONES DE UTILIDAD ===
 
