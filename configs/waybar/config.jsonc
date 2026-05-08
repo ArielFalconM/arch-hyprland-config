@@ -22,7 +22,7 @@
     "on-click": "activate",
     "all-outputs": true,
     "persistent-workspaces": {
-        "*": 5 // Siempre 5 puntos visibles.
+        "*": [1, 2, 3, 4, 5]
     },
     "format-icons": {
       "active": "󰮯",

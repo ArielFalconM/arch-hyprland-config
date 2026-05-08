@@ -68,6 +68,8 @@ sof-firmware
 smartmontools
 power-profiles-daemon
 brightnessctl
+socat
+jq
 
 # --- TERMINAL Y EDITORES ---
 kitty
