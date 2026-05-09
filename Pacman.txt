@@ -75,6 +75,7 @@ jq
 kitty
 neovim
 code
+zed
 
 # --- APLICACIONES DE USUARIO ---
 obsidian

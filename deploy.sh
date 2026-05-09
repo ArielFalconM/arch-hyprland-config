@@ -15,7 +15,7 @@ SYSTEM_DIR="$REPO_ROOT/system"
 
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
-HYBRID_CONFIGS=("Code - OSS" "obsidian" "gtk-4.0")
+HYBRID_CONFIGS=("Code - OSS" "obsidian" "gtk-4.0" "zed")
 
 # === FUNCIONES DE UTILIDAD ===
 
@@ -42,7 +42,7 @@ deploy_hybrid() {
     find "$repo_source" -type f | while read -r repo_file; do
         relative_path="${repo_file#$repo_source/}"
         target_path="$system_target/$relative_path"
-        
+
         mkdir -p "$(dirname "$target_path")"
         backup_if_real "$target_path"
         ln -sf "$repo_file" "$target_path"
@@ -58,7 +58,7 @@ deploy_atomic() {
     echo ">> Procesando Atómico: $folder"
     backup_if_real "$system_target"
     # Flag -n para evitar enlaces recursivos
-    ln -sfn "$repo_source" "$system_target" 
+    ln -sfn "$repo_source" "$system_target"
     echo "    [INFO] Carpeta vinculada con éxito."
 }
 
@@ -127,12 +127,12 @@ if [ -d "$SCRIPTS_DIR" ]; then
                 echo ">> Saltando scripts de laptop (Excluido por el usuario)"
                 continue
             fi
-            
+
             for laptop_script in "$SCRIPTS_DIR/laptop_scripts/"*; do
                 [ -e "$laptop_script" ] || continue
-                
-                base_name=$(basename "$laptop_script") 
-                
+
+                base_name=$(basename "$laptop_script")
+
                 echo ">> Procesando Script de Laptop: $base_name"
                 backup_if_real "$BIN_TARGET/$base_name"
                 ln -sf "$laptop_script" "$BIN_TARGET/$base_name"
@@ -158,7 +158,7 @@ fi
 echo -e "\n=== VERIFICANDO DIRECTORIOS BASE ==="
 SCREENSHOTS_DIR="$HOME/Pictures/Screenshots"
 
-mkdir -p "$SCREENSHOTS_DIR" 
+mkdir -p "$SCREENSHOTS_DIR"
 echo "    [INFO] Directorio de capturas asegurado en $SCREENSHOTS_DIR"
 
 if [ -d "$WALLPAPERS_DIR" ]; then
@@ -185,11 +185,11 @@ fi
 if [ -d "$SYSTEM_DIR" ]; then
     echo -e "\n=== FASE 4: INYECTANDO CONFIGURACIONES DEL SISTEMA ==="
     echo ">> Esta fase requiere permisos de administrador para modificar el sistema."
-    
+
     # --- Configuración de SDDM ---
     if [ -d "$SYSTEM_DIR/sddm" ]; then
         echo ">> Configurando gestor de sesión (SDDM)..."
-        
+
         # 1. Copiar el archivo principal que activa el tema
         if [ -f "$SYSTEM_DIR/sddm/sugar-candy.conf" ]; then
             sudo mkdir -p /etc/sddm.conf.d
@@ -212,7 +212,7 @@ if [ -d "$SYSTEM_DIR" ]; then
                     echo "    [INFO] Configuración de Sugar Candy copiada."
                 fi
             fi
-            
+
             # Copiar el wallpaper al directorio del tema
             if [ -f "$SYSTEM_DIR/sddm/sddm_wallpaper.jpg" ]; then
                 if ! cmp -s "$SYSTEM_DIR/sddm/sddm_wallpaper.jpg" "$SUGAR_DIR/Backgrounds/sddm_wallpaper.jpg" 2>/dev/null; then

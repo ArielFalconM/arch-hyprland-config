@@ -1,7 +1,7 @@
 [Added Associations]
 image/png=imv-4.desktop;imv-3.desktop;imv-2.desktop;
-text/plain=code-oss.desktop;
-application/x-zerosize=code-oss.desktop;
+text/plain=zed.desktop;
+application/x-zerosize=zed.desktop;
 
 [Default Applications]
 image/gif=imv.desktop

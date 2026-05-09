@@ -1,0 +1,42 @@
+// Zed settings
+{
+  "when_closing_with_no_tabs": "keep_window_open",
+
+  // Interfaz y Tipografía
+  "theme": {
+    "mode": "dark",
+    "light": "Catppuccin Latte",
+    "dark": "Catppuccin Macchiato",
+  },
+  "icon_theme": "Zed (Default)",
+  "ui_font_size": 16,
+  "buffer_font_size": 15,
+  "buffer_font_family": "JetBrainsMono Nerd Font",
+
+  // Comportamiento Core
+  "autosave": "on_focus_change",
+  "format_on_save": "on",
+  "vim_mode": false,
+
+  // Paneles y Pestañas
+  "tabs": {
+    "file_icons": true,
+    "git_status": true,
+  },
+  "project_panel": {
+    "dock": "left",
+  },
+
+  // Terminal Integrada
+  "terminal": {
+    "shell": "system",
+    "working_directory": "current_project_directory",
+    "font_family": "JetBrainsMono Nerd Font",
+  },
+
+  // Privacidad y Telemetría
+  "telemetry": {
+    "metrics": false,
+    "diagnostics": false,
+  },
+}
