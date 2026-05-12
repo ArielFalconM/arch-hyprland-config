@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Guardamos el estado inicial
-last_ssid=$(nmcli -t -f active,ssid dev wifi | grep '^yes' | cut -d: -f2)
+# Estado inicial leyendo el demonio
+last_ssid=$(nmcli -t -f NAME,TYPE connection show --active | grep 'wireless' | cut -d: -f1 | head -n 1)
 
 while true; do
-    # Obtenemos el SSID actual
-    current_ssid=$(nmcli -t -f active,ssid dev wifi | grep '^yes' | cut -d: -f2)
+    # SSID actual de forma pasiva
+    current_ssid=$(nmcli -t -f NAME,TYPE connection show --active | grep 'wireless' | cut -d: -f1 | head -n 1)
 
     # Caso 1: Se conecta a una red nueva (o cambia de red)
     if [ -n "$current_ssid" ] && [ "$current_ssid" != "$last_ssid" ]; then
