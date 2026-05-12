@@ -1,8 +1,10 @@
 -- Configuración de apariencia
-vim.opt.termguicolors = true   
-vim.opt.number = true          
-vim.opt.relativenumber = false 
-vim.opt.cursorline = true      
+---@diagnostic disable: undefined-global
+
+vim.opt.termguicolors = true
+vim.opt.number = true
+vim.opt.relativenumber = false
+vim.opt.cursorline = true
 
 -- Función de transparencia y colores de numeros
 local function setup_colors()
