@@ -4,11 +4,11 @@
 
 -- REGLAS DE CAPAS (LAYER RULES)
 
--- Aplicar efecto blur en la waybar
 hl.layer_rule({
     name = "waybar",
     match = { namespace = "waybar" },
-    blur = true
+    blur = true,
+    ignore_alpha = 0.1
 })
 
 

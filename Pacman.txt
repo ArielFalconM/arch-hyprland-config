@@ -18,6 +18,7 @@ hyprlock
 hypridle
 waybar
 sddm
+python-pywal
 xdg-desktop-portal-hyprland
 xdg-desktop-portal-gtk
 qt5-graphicaleffects
@@ -57,6 +58,7 @@ bluez-utils
 networkmanager
 network-manager-applet
 iwd
+mpv-mpris
 wpa_supplicant
 wireless_tools
 vulkan-intel

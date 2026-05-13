@@ -1,4 +1,4 @@
--- keybinds.lua (API Hyprland 0.55+)
+-- keybinds.lua
 ---@diagnostic disable: undefined-global
 
 
@@ -16,16 +16,21 @@ hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd("kitty"))
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("pkill waybar || waybar &"))
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd("nemo"))
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd("brave"))
+hl.bind(mainMod .. " + Z", hl.dsp.exec_cmd("zeditor"))
+hl.bind(mainMod .. " + O", hl.dsp.exec_cmd("obsidian"))
 
 -- Notificaciones y Sesión
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("swaync-client -t -sw"))
 hl.bind(mainMod .. " + P", hl.dsp.exec_cmd("pkill -x wlogout || wlogout -b 4"))
 hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("loginctl lock-session"))
-hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("hyprctl dispatch exit"))
+hl.bind(mainMod .. " + M", hl.dsp.exit())
 
 -- Captura de pantalla
 hl.bind(mainMod .. " + SHIFT + S",
     hl.dsp.exec_cmd('grim -g "$(slurp)" - | tee ~/Pictures/Screenshots/$(date +\'%Y-%m-%d_%H-%M-%S.png\') | wl-copy'))
+-- Captura de pantalla con la tecla PrtSc
+hl.bind("Print",
+    hl.dsp.exec_cmd([[grim -g "$(slurp)" - | tee ~/Pictures/Screenshots/$(date +'%Y-%m-%d_%H-%M-%S.png') | wl-copy]]))
 
 
 
@@ -34,7 +39,7 @@ hl.bind(mainMod .. " + SHIFT + S",
 
 hl.bind(mainMod .. " + C", hl.dsp.window.close())
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
-hl.bind(mainMod .. " + F", hl.dsp.exec_cmd("hyprctl dispatch fullscreen 0"))
+hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ mode = 0 }))
 
 -- Foco direccional
 hl.bind(mainMod .. " + left", hl.dsp.focus({ direction = "left" }))

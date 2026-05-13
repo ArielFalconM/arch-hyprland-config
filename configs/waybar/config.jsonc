@@ -1,135 +1,102 @@
 {
   "layer": "top",
+  "exclusive": true,
   "position": "top",
-  "height": 36,
-  "spacing": 5,
+  "margin-top": 4,
+  "width": 1450,
+  "reload_style_on_change": true,
 
-  "modules-left": ["hyprland/workspaces"],
-  "modules-center": ["clock"],
-  "modules-right": [
-    "pulseaudio",
+  "modules-center": [
+    "hyprland/workspaces",
+    "custom/separator",
+    "custom/mpris",
+    "custom/separator",
+    "clock",
+    "custom/separator",
     "custom/bluetooth",
-    "power-profiles-daemon",
     "network",
+    "pulseaudio",
+    "temperature",
+    "memory",
     "battery",
-    "custom/spotify-tray",
     "tray",
-    "group/power"
   ],
 
-"hyprland/workspaces": {
+  "hyprland/workspaces": {
     "format": "{icon}",
     "on-click": "activate",
     "all-outputs": true,
     "persistent-workspaces": {
-        "*": [1, 2, 3, 4, 5]
+      "*": [1, 2, 3, 4, 5],
     },
     "format-icons": {
-      "active": "󰮯",
-      "default": "<span font='6'></span>",
-      "empty": ""
-    }
-},
+      "active": "",
+      "default": "",
+      "empty": "",
+    },
+  },
 
-"clock": {
-    "format": "{:%H:%M}",
+  "custom/separator": {
+    "format": "|",
+    "tooltip": false,
+  },
+
+  "custom/mpris": {
+    "exec": "~/.config/waybar/scripts/mpris.sh",
+    "interval": 1,
+    "return-type": "json",
+    "min-length": 25,
+    "max-length": 25,
+    "on-click": "playerctl play-pause",
+  },
+
+  "clock": {
+    "format": "{:%d %H:%M}",
+    "format-alt": "{:%a, %d %b}",
     "tooltip-format": "<tt>{calendar}</tt>",
     "calendar": {
-        "mode": "month",
-        "format": {
-            "today": "<span color='#bf616a'><b><u>{}</u></b></span>"
-        }
-    }
-},
-
-"custom/spotify-tray": {
-    "format": "{}",
-    "return-type": "json",
-    "interval": 2,
-    "exec": "pgrep -x spotify > /dev/null && echo '{\"text\": \"\", \"class\": \"running\"}' || echo '{\"text\": \"\", \"class\": \"stopped\"}'",
-    "on-click": "hyprctl dispatch workspace 5",
-    "on-click-right": "pkill spotify",
-    "tooltip": false
-  },
-
-"custom/bluetooth": {
-    "format": "{}",
-    "interval": 2, 
-    "exec": "bluetoothctl show | grep -q 'Powered: yes' && ([ $(bluetoothctl devices Connected | wc -l) -gt 0 ] && echo '{\"text\": \"󰋋\", \"class\": \"connected\"}' || echo '{\"text\": \"\", \"class\": \"enabled\"}') || echo '{\"text\": \"󰂲\", \"class\": \"disabled\"}'",
-    "return-type": "json",
-    "on-click": "rfkill unblock bluetooth && sleep 0.1 && (bluetoothctl show | grep -q 'Powered: yes' && bluetoothctl power off || bluetoothctl power on)",
-    "on-click-right": "overskride &",
-    "tooltip": false
-  },
-
-/* --- CONFIGURACIÓN DEL GRUPO DE ENERGÍA Y STATS --- */
-"group/power": {
-    "orientation": "inherit",
-    "drawer": {
-        "transition-duration": 500,
-        "children-class": "stats",
-        "transition-left-to-right": false
+      "mode": "month",
+      "format": {
+        "today": "<span color='#bf616a'><b><u>{}</u></b></span>",
+      },
     },
-    "modules": [
-        "custom/power", // Gatillo
-        "memory",
-        "disk",
-        "cpu",
-        "temperature"
-    ]
-},
-
-"custom/power": {
-    "format": " ",
-    "on-click": "wlogout -b 4",
-    "tooltip-format":"Power"
-},
-
-"cpu": {
-    "format": " {usage}%",
-    "tooltip-format": "Uso Total de CPU"
-},
-
-"memory": {
-    "format": " {}%",
-    "tooltip-format": "Uso de Memoria"
-},
-
-
-"temperature": {
-    "hwmon-path": "/sys/class/hwmon/hwmon3/temp1_input",
-    "critical-threshold": 80,
-    "format": " {temperatureC}°C",
-    "tooltip-format": "Temperatura del Sistema"
-},
-
-
-"disk": {
-    "format": "󰋊 {percentage_used}%",
-    "path": "/",
-    "tooltip-format": "Espacio usado en Disco"
-},
+  },
 
   "pulseaudio": {
     "format": "{icon} {volume}%",
-    "format-icons": { "default": ["", "", ""] },
+    "format-icons": {
+      "default": ["󰕿", "󰖀", "󰕾"],
+    },
     "on-click": "pavucontrol",
     "on-scroll-up": "~/.local/bin/vol_accumulator.sh up",
     "on-scroll-down": "~/.local/bin/vol_accumulator.sh down",
     "reverse-scrolling": 1,
-    "states":{
+    "states": {
       "zero": 0,
-      "high": 80 
-    }
+      "high": 80,
+    },
+    "tooltip": false,
   },
 
-"network": {
+  "network": {
     "format-wifi": " ",
     "format-ethernet": "󰈀",
-    "format-disconnected": "󰖪", 
+    "format-disconnected": "󰖪",
     "tooltip-format": " {essid} ({signalStrength}%)",
-    "on-click": "kitty -e nmtui"
-},
+    "on-click": "kitty -e nmtui",
+  },
+
+  "temperature": {
+    "hwmon-path": "/sys/class/hwmon/hwmon3/temp1_input",
+    "format": " {temperatureC}°C",
+    "critical-threshold": 80,
+    "tooltip": false,
+  },
+
+  "memory": {
+    "format": " {}%",
+    "tooltip": false,
+  },
 
   "battery": {
     "interval": 1,
@@ -137,21 +104,22 @@
     "format": "{icon} {capacity}%",
     "format-charging": " {icon} {capacity}%",
     "format-plugged": " {icon} {capacity}%",
-    "format-icons": ["", "", "", "", ""]
+    "format-icons": ["", "", "", "", ""],
+    "tooltip": false,
   },
 
-  "power-profiles-daemon": {
-    "format": "{icon}",
-    "tooltip-format": "{profile}",
-    "format-icons": {
-      "performance": "󰓅",
-      "balanced": "󰾅",
-      "power-saver": "󰾆"
-    }
+  "custom/bluetooth": {
+    "format": "{}",
+    "interval": 2,
+    "exec": "bluetoothctl show | grep -q 'Powered: yes' && ([ $(bluetoothctl devices Connected | wc -l) -gt 0 ] && echo '{\"text\": \"󰋋\", \"class\": \"connected\"}' || echo '{\"text\": \"\", \"class\": \"enabled\"}') || echo '{\"text\": \"󰂲\", \"class\": \"disabled\"}'",
+    "return-type": "json",
+    "on-click": "rfkill unblock bluetooth && sleep 0.1 && (bluetoothctl show | grep -q 'Powered: yes' && bluetoothctl power off || bluetoothctl power on)",
+    "on-click-right": "overskride &",
+    "tooltip": false,
   },
 
   "tray": {
-    "icon-size": 18,
-    "spacing": 10
-  }
+    "spacing": 8,
+    "tooltip": false,
+  },
 }
