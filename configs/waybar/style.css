@@ -38,6 +38,18 @@ window#waybar {
     color: #d4be98;
 }
 
+#temperature {
+    min-width: 48px;
+}
+
+#memory {
+    min-width: 48px;
+}
+
+#battery {
+    min-width: 48px;
+}
+
 #pulseaudio {
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.15);
@@ -45,6 +57,7 @@ window#waybar {
     margin: 0 5px;
     padding: 2px 11px;
     color: #ea6962;
+    min-width: 48px;
 }
 
 #pulseaudio.zero {

@@ -1,12 +1,12 @@
 {
     "label" : "shutdown",
-    "action" : "systemctl poweroff",
+    "action" : "~/.local/bin/zettel_push.sh; systemctl poweroff",
     "text" : "Shutdown",
     "keybind" : "s"
 }
 {
     "label" : "reboot",
-    "action" : "systemctl reboot",
+    "action" : "~/.local/bin/zettel_push.sh; systemctl reboot",
     "text" : "Reboot",
     "keybind" : "r"
 }

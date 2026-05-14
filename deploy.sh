@@ -8,6 +8,9 @@ TARGET_DIR="$HOME/.config"
 SCRIPTS_DIR="$REPO_ROOT/scripts"
 BIN_TARGET="$HOME/.local/bin"
 
+ICONS_DIR="$REPO_ROOT/icons"
+ICONS_TARGET="$HOME/.local/share/icons"
+
 # Nueva configuración para imágenes y sistema
 WALLPAPERS_DIR="$REPO_ROOT/wallpapers"
 WALLPAPER_TARGET="$HOME/.local/share/wallpapers"
@@ -70,6 +73,28 @@ echo "--------------------------------------------------------"
 
 read -p "¿Desplegar configuraciones exclusivas de laptop? (y/n): " IS_LAPTOP
 echo "--------------------------------------------------------"
+
+
+# ---------------------------------------------------------
+# FASE 0: DESPLIEGUE DE ARCHIVOS DE HOME (~/)
+# ---------------------------------------------------------
+HOME_REPO_DIR="$REPO_ROOT/home"
+
+if [ -d "$HOME_REPO_DIR" ]; then
+    echo -e "\n=== FASE 0: INYECTANDO ARCHIVOS DE HOME ==="
+    cd "$HOME_REPO_DIR" || exit
+
+    for file in .*; do
+        [ "$file" == "." ] || [ "$file" == ".." ] && continue
+        [ -e "$file" ] || continue
+
+        echo ">> Procesando archivo de Home: $file"
+        backup_if_real "$HOME/$file"
+        ln -sf "$HOME_REPO_DIR/$file" "$HOME/$file"
+        echo "    [INFO] Archivo vinculado: $file"
+    done
+fi
+
 
 # ---------------------------------------------------------
 # FASE 1: DESPLIEGUE DE CONFIGURACIONES (~/.config)
@@ -175,6 +200,27 @@ if [ -d "$WALLPAPERS_DIR" ]; then
             backup_if_real "$WALLPAPER_TARGET/$wp"
             ln -sf "$WALLPAPERS_DIR/$wp" "$WALLPAPER_TARGET/$wp"
             echo "    [INFO] Imagen vinculada con éxito."
+        fi
+    done
+fi
+
+# ---------------------------------------------------------
+# FASE 3.5: DESPLIEGUE DE ICONOS (~/.local/share/icons)
+# ---------------------------------------------------------
+if [ -d "$ICONS_DIR" ]; then
+    echo -e "\n=== FASE 3.5: INYECTANDO ICONOS ==="
+    # El directorio base existe
+    mkdir -p "$ICONS_TARGET"
+    cd "$ICONS_DIR" || exit
+
+    for icon in *; do
+        [ -e "$icon" ] || continue
+
+        if [ -f "$icon" ]; then
+            echo ">> Procesando Icono: $icon"
+            backup_if_real "$ICONS_TARGET/$icon"
+            ln -sf "$ICONS_DIR/$icon" "$ICONS_TARGET/$icon"
+            echo "    [INFO] Icono $icon vinculado con éxito."
         fi
     done
 fi
