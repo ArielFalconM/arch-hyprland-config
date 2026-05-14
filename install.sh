@@ -14,6 +14,22 @@ sudo -v
 # Mantener los privilegios de sudo activos durante la ejecución del script
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
+
+echo -e "\n=== PREPARANDO GESTOR DE PAQUETES ==="
+
+# 1. Habilitar el repositorio multilib en pacman.conf
+if grep -q "^#\[multilib\]" /etc/pacman.conf; then
+    echo ">> Habilitando el repositorio [multilib] para soporte de 32 bits (Steam)..."
+    # Descomenta la cabecera [multilib] y la línea Include inmediatamente inferior
+    sudo sed -i '/^#\[multilib\]/ { s/^#//; n; s/^#//; }' /etc/pacman.conf
+
+    # Sincronizar las bases de datos luego del cambio
+    sudo pacman -Sy
+else
+    echo ">> El repositorio [multilib] ya está habilitado."
+fi
+
+
 # ---------------------------------------------------------
 # 1. PREPARACIÓN DEL SISTEMA Y GESTOR AUR
 # ---------------------------------------------------------

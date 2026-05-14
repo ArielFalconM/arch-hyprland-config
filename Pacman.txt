@@ -1,4 +1,20 @@
-# --- SISTEMA BASE Y DRIVERS ---
+# --- ARCHINSTALL HYPRLAND PROFILE ---
+hyprland
+hyprpaper
+hyprlock
+hypridle
+xdg-desktop-portal-hyprland
+polkit-kde-agent
+qt5-wayland
+qt6-wayland
+kitty
+rofi-wayland
+waybar
+grim
+slurp
+wl-clipboard
+
+# --- SISTEMA BASE Y BOOT ---
 linux
 linux-headers
 linux-firmware
@@ -11,35 +27,22 @@ os-prober
 sudo
 zram-generator
 
-# --- ENTORNO GRÁFICO (HYPRLAND) ---
-hyprland
-swaybg
-hyprlock
-hypridle
-waybar
+# --- DISPLAY MANAGER Y COMPLEMENTOS XDG ---
 sddm
-python-pywal
-xdg-desktop-portal-hyprland
 xdg-desktop-portal-gtk
 qt5-graphicaleffects
 qt5-quickcontrols
 qt5-quickcontrols2
 qt5-svg
-qt5-wayland
-qt6-wayland
 
 # --- HERRAMIENTAS DE ESCRITORIO ---
-rofi-wayland
 swaync
-slurp
-grim
 swappy
 nwg-look
-polkit-kde-agent
-wl-clipboard
 libnotify
 gnome-keyring
 seahorse
+python-pywal
 
 # --- AUDIO, VIDEO Y MULTIMEDIA ---
 pipewire
@@ -51,16 +54,18 @@ gst-plugin-pipewire
 pavucontrol
 imv
 mpv
+mpv-mpris
+
+# --- REDES Y COMUNICACIONES ---
+networkmanager
+network-manager-applet
+iwd
+wpa_supplicant
+wireless_tools
 
 # --- DRIVERS Y HARDWARE ---
 bluez
 bluez-utils
-networkmanager
-network-manager-applet
-iwd
-mpv-mpris
-wpa_supplicant
-wireless_tools
 vulkan-intel
 vulkan-radeon
 intel-media-driver
@@ -73,15 +78,14 @@ brightnessctl
 socat
 jq
 
-# --- TERMINAL Y EDITORES ---
-kitty
+# --- EDITORES Y DESARROLLO ---
 neovim
 code
 zed
+godot
 
 # --- APLICACIONES DE USUARIO ---
 obsidian
-godot
 steam
 zathura
 zathura-pdf-mupdf
@@ -110,7 +114,7 @@ gnome-themes-extra
 icon-library
 grub-theme-vimix
 
-# --- DEPENDENCIAS DE DESARROLLO / PYTHON ---
+# --- DEPENDENCIAS ADICIONALES / LIBRERÍAS ---
 python-pip
 python-pillow
 python-evdev
