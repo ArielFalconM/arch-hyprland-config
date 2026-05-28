@@ -13,7 +13,7 @@ BIN_TARGET="$HOME/.local/bin"
 ICONS_DIR="$REPO_ROOT/icons"
 ICONS_TARGET="$HOME/.local/share/icons"
 
-# Nueva configuración para imágenes y sistema
+# Configuración para imágenes y sistema
 WALLPAPERS_DIR="$REPO_ROOT/wallpapers"
 WALLPAPER_TARGET="$HOME/.local/share/wallpapers"
 SYSTEM_DIR="$REPO_ROOT/system"

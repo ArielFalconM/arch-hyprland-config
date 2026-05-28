@@ -15,16 +15,14 @@ El script `install.sh` es el punto de entrada principal diseñado para levantar 
 
 ## ⚙️ Motor de Despliegue de Precisión
 
-La pieza central de este repositorio es el script `deploy.sh`. A diferencia de los gestores de dotfiles convencionales, este motor utiliza una lógica selectiva segmentada en fases para mantener la integridad del sistema:
+La pieza central de este repositorio es el script `deploy.sh`. A diferencia de los gestores de dotfiles convencionales, este motor utiliza una lógica selectiva segmentada en fases (Base + Overrides) para mantener la integridad del sistema:
 
+- 💻 **Perfiles de Hardware:** Consulta el dispositivo (Laptop vs. Torre) para inyectar _overrides_ específicos sin duplicar configuraciones base.
 - 🏠 **Despliegue de Entorno (Home):** Inyecta archivos base de configuración de usuario directamente en el directorio raíz del usuario.
-
-- ⚡ **Despliegue Atómico:** Enlaza carpetas completas de manera estricta para componentes donde la configuración es controlada íntegramente por el repositorio (Hyprland, Waybar, Kitty, Rofi, Neovim).
-
-- 🧩 **Despliegue Híbrido:** Para aplicaciones con datos volátiles (**Obsidian, Code - OSS**), el script enlaza únicamente los archivos de configuración específicos (`.json`, `.conf`), protegiendo bases de datos y cachés locales.
-
+- ⚡ **Despliegue Atómico:** Enlaza carpetas completas de manera estricta para componentes donde la configuración es controlada íntegramente por el repositorio (Waybar, Kitty, Rofi, Neovim).
+- 🧩 **Despliegue Híbrido:** Mediante el marcador `.hybrid`, el script enlaza únicamente archivos específicos. Esto protege datos volátiles (Obsidian, Code - OSS) y permite fusionar archivos base con configuraciones exclusivas de cada perfil (ej. Hyprland).
 - 🔐 **Despliegue del Sistema:** Gestiona la copia de archivos que requieren privilegios de administrador (como el gestor de sesión SDDM), empleando lógica idempotente para evitar redundancias.
-
+- 🧹 **Limpieza de Drift:** Rastrea y destruye automáticamente enlaces rotos o archivos pertenecientes al perfil de hardware inactivo.
 - 🛡️ **Seguridad y Respaldo:** El sistema detecta archivos reales preexistentes y genera backups automáticos con marca de tiempo (`.bak_YYYYMMDD_HHMMSS`) antes de aplicar cambios.
 
 ## 🛠️ Stack Tecnológico
@@ -43,12 +41,16 @@ La pieza central de este repositorio es el script `deploy.sh`. A diferencia de l
 ```text
 arch-hyprland-config/
 ├── home/               # Archivos base de entorno de usuario
-├── configs/            # Directorios de configuración destinados a ~/.config
+├── configs/             # Directorios de configuración destinados a ~/.config
+│   ├── laptop_configs/  # Overrides exclusivos para dispositivos portátiles
+│   └── torre_configs/   # Overrides exclusivos para PC de escritorio (NVIDIA)
 ├── scripts/            # Utilidades ejecutables
+│   ├── torre_scripts/   # Lógica de hardware de escritorio (NVIDIA)
 │   └── laptop_scripts/ # Lógica de hardware exclusiva para dispositivos portátiles
 ├── icons/              # Iconos individuales inyectados en ~/.local/share/icons
 ├── system/             # Configuraciones de nivel de sistema (/etc)
 ├── wallpapers/         # Gestión de fondos de pantalla para Hyprpaper
 ├── install.sh          # Instalador automatizado de dependencias (Pacman/AUR)
-└── deploy.sh           # Motor maestro de sincronización y despliegue de estado
+├── deploy.sh           # Motor maestro de sincronización y despliegue de estado
+└── clean_backups.sh    # Script para limpiar backups antiguos
 ```
