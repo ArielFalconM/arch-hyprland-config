@@ -4,12 +4,19 @@
 hl.env("XCURSOR_SIZE", "24")
 hl.env("HYPRCURSOR_SIZE", "24")
 
+-- Variables de Entorno NVIDIA (CRÍTICO para la RTX 2080)
+hl.env("LIBVA_DRIVER_NAME", "nvidia")
+hl.env("XDG_SESSION_TYPE", "wayland")
+hl.env("GBM_BACKEND", "nvidia-drm")
+hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
+hl.env("VK_ICD_FILENAMES", "/usr/share/vulkan/icd.d/nvidia_icd.json") -- EL PUENTE VULKAN
+
 -- Monitores (Monitor por defecto)
 hl.monitor({
     output = "",
     mode = "preferred",
     position = "auto",
-    scale = "1.25"
+    scale = "1.5"
 })
 
 -- XWayland
@@ -22,8 +29,7 @@ hl.config({
 -- Inicio Automático
 hl.on("hyprland.start", function()
     -- Infraestructura
-    hl.exec_cmd("~/.local/bin/laptop_monitor.sh")
-    hl.exec_cmd("swaybg -i ~/.local/share/wallpapers/wallpaper -m fill &")
+    hl.exec_cmd("hyprpaper &")
     hl.exec_cmd("wal -i ~/.local/share/wallpapers/wallpaper -n")
     hl.exec_cmd("gnome-keyring-daemon --start --components=secrets")
     hl.exec_cmd("rofi -show drun & sleep 0.1 && pkill rofi")
@@ -36,7 +42,5 @@ hl.on("hyprland.start", function()
     hl.exec_cmd(" ~/.local/bin/spotify_notify.sh &")
     hl.exec_cmd("~/.local/bin/usb_notify.sh &")
     hl.exec_cmd("~/.local/bin/wifi_notify.sh &")
-    hl.exec_cmd("~/.local/bin/bat_notify.sh &")
     hl.exec_cmd("~/.local/bin/bluetooth_notify.sh &")
-    hl.exec_cmd("~/.local/bin/power_profile_notify.sh &")
 end)

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 # === CONFIGURACIÓN ===
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONFIG_DIR="$REPO_ROOT/configs"
@@ -18,51 +20,62 @@ SYSTEM_DIR="$REPO_ROOT/system"
 
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
-HYBRID_CONFIGS=("Code - OSS" "obsidian" "gtk-4.0" "zed")
-
 # === FUNCIONES DE UTILIDAD ===
 
 backup_if_real() {
     local path=$1
-    if [ -e "$path" ] && [ ! -L "$path" ]; then
+    if [ -L "$path" ] && [ ! -e "$path" ]; then
+        rm "$path"
+    elif [ -e "$path" ] && [ ! -L "$path" ]; then
         echo "  [WARN] Archivo real detectado. Creando backup: $(basename "$path").bak_$TIMESTAMP"
         if [ -w "$(dirname "$path")" ]; then
             mv "$path" "$path.bak_$TIMESTAMP"
         else
-            sudo mv "$path" "$path.bak_$TIMESTAMP"
+            sudo mv "$path" "$path.bak_$TIMESTAMP" || echo "  [ERROR] No se pudo hacer backup de $path"
         fi
     fi
 }
 
 deploy_hybrid() {
-    local folder=$1
-    local repo_source="$CONFIG_DIR/$folder"
-    local system_target="$TARGET_DIR/$folder"
+    local repo_source=$1
+    local system_target=$2
 
-    echo ">> Procesando Híbrido: $folder"
+    echo ">> Procesando Híbrido: $(basename "$repo_source")"
     mkdir -p "$system_target"
 
-    find "$repo_source" -type f | while read -r repo_file; do
-        relative_path="${repo_file#$repo_source/}"
-        target_path="$system_target/$relative_path"
+    while IFS= read -r -d '' repo_file; do
+        local relative_path="${repo_file#$repo_source/}"
+        local target_path="$system_target/$relative_path"
+
+        if [ "$(basename "$repo_file")" == ".hybrid" ]; then continue; fi
 
         mkdir -p "$(dirname "$target_path")"
         backup_if_real "$target_path"
         ln -sf "$repo_file" "$target_path"
         echo "    [INFO] Archivo vinculado: $relative_path"
-    done
+    done < <(find "$repo_source" -type f -print0)
 }
 
 deploy_atomic() {
-    local folder=$1
-    local repo_source="$CONFIG_DIR/$folder"
-    local system_target="$TARGET_DIR/$folder"
+    local repo_source=$1
+    local system_target=$2
 
-    echo ">> Procesando Atómico: $folder"
+    echo ">> Procesando Atómico: $(basename "$repo_source")"
     backup_if_real "$system_target"
     # Flag -n para evitar enlaces recursivos
     ln -sfn "$repo_source" "$system_target"
     echo "    [INFO] Carpeta vinculada con éxito."
+}
+
+deploy_module() {
+    local source_path=$1
+    local target_path=$2
+
+    if [ -f "$source_path/.hybrid" ]; then
+        deploy_hybrid "$source_path" "$target_path"
+    else
+        deploy_atomic "$source_path" "$target_path"
+    fi
 }
 
 # === EJECUCIÓN PRINCIPAL ===
@@ -71,9 +84,26 @@ echo "=== MOTOR DE DESPLIEGUE ==="
 echo "Repo: $REPO_ROOT"
 echo "--------------------------------------------------------"
 
-read -p "¿Desplegar configuraciones exclusivas de laptop? (y/n): " IS_LAPTOP
-echo "--------------------------------------------------------"
+echo "¿En qué hardware se está desplegando Arch-Nemesis?"
+echo "1) Laptop (Gráficos integrados / Batería)"
+echo "2) PC Torre (NVIDIA)"
+read -rp "Selecciona una opción [1/2]: " HW_CHOICE || true
 
+if [[ "$HW_CHOICE" != "1" && "$HW_CHOICE" != "2" ]]; then
+    echo "    [ERROR] Entrada inválida ('$HW_CHOICE'). Abortando despliegue."
+    exit 1
+fi
+
+if [ "$HW_CHOICE" == "2" ]; then
+    ACTIVE_PROFILE="torre"
+    INACTIVE_PROFILE="laptop"
+    echo "    [INFO] Perfil asignado: TORRE."
+else
+    ACTIVE_PROFILE="laptop"
+    INACTIVE_PROFILE="torre"
+    echo "    [INFO] Perfil asignado: LAPTOP."
+fi
+echo "--------------------------------------------------------"
 
 # ---------------------------------------------------------
 # FASE 0: DESPLIEGUE DE ARCHIVOS DE HOME (~/)
@@ -82,58 +112,55 @@ HOME_REPO_DIR="$REPO_ROOT/home"
 
 if [ -d "$HOME_REPO_DIR" ]; then
     echo -e "\n=== FASE 0: INYECTANDO ARCHIVOS DE HOME ==="
-    cd "$HOME_REPO_DIR" || exit
 
-    for file in .*; do
-        [ "$file" == "." ] || [ "$file" == ".." ] && continue
-        [ -e "$file" ] || continue
-
-        echo ">> Procesando archivo de Home: $file"
-        backup_if_real "$HOME/$file"
-        ln -sf "$HOME_REPO_DIR/$file" "$HOME/$file"
-        echo "    [INFO] Archivo vinculado: $file"
-    done
+    while IFS= read -r -d '' file; do
+        base_name=$(basename "$file")
+        echo ">> Procesando archivo de Home: $base_name"
+        backup_if_real "$HOME/$base_name"
+        ln -sf "$file" "$HOME/$base_name"
+        echo "    [INFO] Archivo vinculado: $base_name"
+    done < <(find "$HOME_REPO_DIR" -mindepth 1 -maxdepth 1 -type f -print0)
 fi
-
 
 # ---------------------------------------------------------
 # FASE 1: DESPLIEGUE DE CONFIGURACIONES (~/.config)
 # ---------------------------------------------------------
 if [ -d "$CONFIG_DIR" ]; then
     echo -e "\n=== FASE 1: INYECTANDO CONFIGURACIONES ==="
-    cd "$CONFIG_DIR" || exit
+    mkdir -p "$TARGET_DIR"
 
-    for item in *; do
-        [ -e "$item" ] || continue
+    # Parte A: Despliegue Base
+    while IFS= read -r -d '' item; do
+        base_name=$(basename "$item")
 
-        if [ "$item" == "laptop_configs" ]; then
-            if [[ ! "$IS_LAPTOP" =~ ^[Yy]$ ]]; then
-                echo ">> Saltando $item (Excluido por el usuario)"
-                continue
-            fi
-        fi
+        if [[ "$base_name" == *_configs ]]; then continue; fi
 
         if [ -f "$item" ]; then
-            echo ">> Procesando Archivo: $item"
-            backup_if_real "$TARGET_DIR/$item"
-            ln -sf "$CONFIG_DIR/$item" "$TARGET_DIR/$item"
+            echo ">> Procesando Archivo: $base_name"
+            backup_if_real "$TARGET_DIR/$base_name"
+            ln -sf "$item" "$TARGET_DIR/$base_name"
             echo "    [INFO] Archivo vinculado con éxito."
-            continue
+        elif [ -d "$item" ]; then
+            deploy_module "$item" "$TARGET_DIR/$base_name"
         fi
+    done < <(find "$CONFIG_DIR" -mindepth 1 -maxdepth 1 -print0)
 
-        if [ -d "$item" ]; then
-            is_hybrid=false
-            for h in "${HYBRID_CONFIGS[@]}"; do
-                [[ "$h" == "$item" ]] && is_hybrid=true && break
-            done
+    # Parte B: Inyección de Overrides (Perfiles)
+    PROFILE_DIR="$CONFIG_DIR/${ACTIVE_PROFILE}_configs"
+    if [ -d "$PROFILE_DIR" ]; then
+        echo -e "\n>> Sobrescribiendo con configuraciones de perfil: $ACTIVE_PROFILE"
+        while IFS= read -r -d '' override; do
+            base_name=$(basename "$override")
+            echo "    [INFO] Aplicando override para: $base_name"
 
-            if [ "$is_hybrid" = true ]; then
-                deploy_hybrid "$item"
-            else
-                deploy_atomic "$item"
+            if [ -f "$override" ]; then
+                backup_if_real "$TARGET_DIR/$base_name"
+                ln -sf "$override" "$TARGET_DIR/$base_name"
+            elif [ -d "$override" ]; then
+                deploy_module "$override" "$TARGET_DIR/$base_name"
             fi
-        fi
-    done
+        done < <(find "$PROFILE_DIR" -mindepth 1 -maxdepth 1 -print0)
+    fi
 fi
 
 # ---------------------------------------------------------
@@ -142,37 +169,28 @@ fi
 if [ -d "$SCRIPTS_DIR" ]; then
     echo -e "\n=== FASE 2: INYECTANDO SCRIPTS ==="
     mkdir -p "$BIN_TARGET"
-    cd "$SCRIPTS_DIR" || exit
 
-    for script in *; do
-        [ -e "$script" ] || continue
+    while IFS= read -r -d '' item; do
+        base_name=$(basename "$item")
 
-        if [ "$script" == "laptop_scripts" ]; then
-            if [[ ! "$IS_LAPTOP" =~ ^[Yy]$ ]]; then
-                echo ">> Saltando scripts de laptop (Excluido por el usuario)"
-                continue
+        if [ -d "$item" ]; then
+            if [ "$base_name" == "${ACTIVE_PROFILE}_scripts" ]; then
+                while IFS= read -r -d '' host_script; do
+                    script_name=$(basename "$host_script")
+                    echo ">> Procesando Script de Perfil: $script_name"
+                    backup_if_real "$BIN_TARGET/$script_name"
+                    ln -sf "$host_script" "$BIN_TARGET/$script_name"
+                done < <(find "$item" -mindepth 1 -maxdepth 1 -type f -print0)
             fi
-
-            for laptop_script in "$SCRIPTS_DIR/laptop_scripts/"*; do
-                [ -e "$laptop_script" ] || continue
-
-                base_name=$(basename "$laptop_script")
-
-                echo ">> Procesando Script de Laptop: $base_name"
-                backup_if_real "$BIN_TARGET/$base_name"
-                ln -sf "$laptop_script" "$BIN_TARGET/$base_name"
-                chmod +x "$BIN_TARGET/$base_name"
-            done
             continue
         fi
 
-        if [ -f "$script" ]; then
-            echo ">> Procesando Script: $script"
-            backup_if_real "$BIN_TARGET/$script"
-            ln -sf "$SCRIPTS_DIR/$script" "$BIN_TARGET/$script"
-            chmod +x "$BIN_TARGET/$script"
+        if [ -f "$item" ]; then
+            echo ">> Procesando Script Base: $base_name"
+            backup_if_real "$BIN_TARGET/$base_name"
+            ln -sf "$item" "$BIN_TARGET/$base_name"
         fi
-    done
+    done < <(find "$SCRIPTS_DIR" -mindepth 1 -maxdepth 1 -print0)
 fi
 
 # ---------------------------------------------------------
@@ -188,20 +206,14 @@ echo "    [INFO] Directorio de capturas asegurado en $SCREENSHOTS_DIR"
 
 if [ -d "$WALLPAPERS_DIR" ]; then
     echo -e "\n=== FASE 3: INYECTANDO WALLPAPERS ==="
-    # Creamos la ruta genérica si no existe
     mkdir -p "$WALLPAPER_TARGET"
-    cd "$WALLPAPERS_DIR" || exit
 
-    for wp in *; do
-        [ -e "$wp" ] || continue # Evita errores si la carpeta está vacía
-
-        if [ -f "$wp" ]; then
-            echo ">> Procesando Wallpaper: $wp"
-            backup_if_real "$WALLPAPER_TARGET/$wp"
-            ln -sf "$WALLPAPERS_DIR/$wp" "$WALLPAPER_TARGET/$wp"
-            echo "    [INFO] Imagen vinculada con éxito."
-        fi
-    done
+    while IFS= read -r -d '' wp; do
+        base_name=$(basename "$wp")
+        backup_if_real "$WALLPAPER_TARGET/$base_name"
+        ln -sf "$wp" "$WALLPAPER_TARGET/$base_name"
+        echo "    [INFO] Imagen vinculada con éxito."
+    done < <(find "$WALLPAPERS_DIR" -mindepth 1 -maxdepth 1 -type f -print0)
 fi
 
 # ---------------------------------------------------------
@@ -209,20 +221,14 @@ fi
 # ---------------------------------------------------------
 if [ -d "$ICONS_DIR" ]; then
     echo -e "\n=== FASE 3.5: INYECTANDO ICONOS ==="
-    # El directorio base existe
     mkdir -p "$ICONS_TARGET"
-    cd "$ICONS_DIR" || exit
 
-    for icon in *; do
-        [ -e "$icon" ] || continue
-
-        if [ -f "$icon" ]; then
-            echo ">> Procesando Icono: $icon"
-            backup_if_real "$ICONS_TARGET/$icon"
-            ln -sf "$ICONS_DIR/$icon" "$ICONS_TARGET/$icon"
-            echo "    [INFO] Icono $icon vinculado con éxito."
-        fi
-    done
+    while IFS= read -r -d '' icon; do
+        base_name=$(basename "$icon")
+        backup_if_real "$ICONS_TARGET/$base_name"
+        ln -sf "$icon" "$ICONS_TARGET/$base_name"
+        echo "    [INFO] Icono $base_name vinculado con éxito."
+    done < <(find "$ICONS_DIR" -mindepth 1 -maxdepth 1 -type f -print0)
 fi
 
 # ---------------------------------------------------------
@@ -236,44 +242,56 @@ if [ -d "$SYSTEM_DIR" ]; then
     if [ -d "$SYSTEM_DIR/sddm" ]; then
         echo ">> Configurando gestor de sesión (SDDM)..."
 
-        # 1. Copiar el archivo principal que activa el tema
-        if [ -f "$SYSTEM_DIR/sddm/sugar-candy.conf" ]; then
-            sudo mkdir -p /etc/sddm.conf.d
-            # 'cmp -s' compara los archivos y solo hace el backup/copia si son diferentes
-            if ! cmp -s "$SYSTEM_DIR/sddm/sugar-candy.conf" "/etc/sddm.conf.d/sugar-candy.conf" 2>/dev/null; then
-                backup_if_real "/etc/sddm.conf.d/sugar-candy.conf"
-                sudo cp "$SYSTEM_DIR/sddm/sugar-candy.conf" /etc/sddm.conf.d/
-                echo "    [INFO] Archivo de activación de tema copiado."
-            fi
-        fi
-
-        # 2. Copiar configuraciones específicas del tema Sugar Candy
-        SUGAR_DIR="/usr/share/sddm/themes/sugar-candy"
-        if [ -d "$SUGAR_DIR" ]; then
-            # Copiar la configuración del tema
-            if [ -f "$SYSTEM_DIR/sddm/theme.conf" ]; then
-                if ! cmp -s "$SYSTEM_DIR/sddm/theme.conf" "$SUGAR_DIR/theme.conf" 2>/dev/null; then
-                    backup_if_real "$SUGAR_DIR/theme.conf"
-                    sudo cp "$SYSTEM_DIR/sddm/theme.conf" "$SUGAR_DIR/"
-                    echo "    [INFO] Configuración de Sugar Candy copiada."
+        if sudo -v 2>/dev/null; then
+            # 1. Copiar el archivo principal que activa el tema
+            if [ -f "$SYSTEM_DIR/sddm/sugar-candy.conf" ]; then
+                sudo mkdir -p /etc/sddm.conf.d
+                if ! cmp -s "$SYSTEM_DIR/sddm/sugar-candy.conf" "/etc/sddm.conf.d/sugar-candy.conf" 2>/dev/null; then
+                    backup_if_real "/etc/sddm.conf.d/sugar-candy.conf"
+                    sudo cp "$SYSTEM_DIR/sddm/sugar-candy.conf" /etc/sddm.conf.d/ && echo "    [INFO] Archivo de activación de tema copiado." || echo "    [WARN] Falló la copia de sugar-candy.conf"
                 fi
             fi
 
-            # Copiar el wallpaper al directorio del tema
-            if [ -f "$SYSTEM_DIR/sddm/sddm_wallpaper.jpg" ]; then
-                if ! cmp -s "$SYSTEM_DIR/sddm/sddm_wallpaper.jpg" "$SUGAR_DIR/Backgrounds/sddm_wallpaper.jpg" 2>/dev/null; then
+            # 2. Copiar configuraciones específicas del tema Sugar Candy
+            SUGAR_DIR="/usr/share/sddm/themes/sugar-candy"
+            if [ -d "$SUGAR_DIR" ]; then
+                if [ -f "$SYSTEM_DIR/sddm/theme.conf" ] && ! cmp -s "$SYSTEM_DIR/sddm/theme.conf" "$SUGAR_DIR/theme.conf" 2>/dev/null; then
+                    backup_if_real "$SUGAR_DIR/theme.conf"
+                    sudo cp "$SYSTEM_DIR/sddm/theme.conf" "$SUGAR_DIR/" && echo "    [INFO] Configuración de Sugar Candy copiada." || echo "    [WARN] Falló la copia de theme.conf"
+                fi
+
+                if [ -f "$SYSTEM_DIR/sddm/sddm_wallpaper.jpg" ] && ! cmp -s "$SYSTEM_DIR/sddm/sddm_wallpaper.jpg" "$SUGAR_DIR/Backgrounds/sddm_wallpaper.jpg" 2>/dev/null; then
                     backup_if_real "$SUGAR_DIR/Backgrounds/sddm_wallpaper.jpg"
                     sudo mkdir -p "$SUGAR_DIR/Backgrounds"
-                    sudo cp "$SYSTEM_DIR/sddm/sddm_wallpaper.jpg" "$SUGAR_DIR/Backgrounds/"
-                    echo "    [INFO] Wallpaper de login copiado."
+                    sudo cp "$SYSTEM_DIR/sddm/sddm_wallpaper.jpg" "$SUGAR_DIR/Backgrounds/" && echo "    [INFO] Wallpaper de login copiado." || echo "    [WARN] Falló la copia del wallpaper."
                 fi
+            else
+                echo "    [WARN] El tema Sugar Candy no está en $SUGAR_DIR."
+                echo "    Asegúrate de que el paquete de AUR se haya instalado correctamente."
             fi
         else
-            echo "    [WARN] El tema Sugar Candy no está en $SUGAR_DIR."
-            echo "    Asegúrate de que el paquete de AUR se haya instalado correctamente."
+            echo "    [WARN] Permisos denegados (Sudo). Saltando inyección de SDDM."
         fi
     fi
 fi
+
+# ---------------------------------------------------------
+# FASE 5: RECONCILIACIÓN (Limpieza de Drift)
+# ---------------------------------------------------------
+echo -e "\n=== FASE 5: LIMPIEZA DE DRIFT ==="
+echo ">> Buscando enlaces simbólicos huérfanos y de perfiles inactivos..."
+
+while IFS= read -r -d '' link; do
+    target=$(readlink "$link")
+
+    if [[ "$target" == "$REPO_ROOT"* ]] && [ ! -e "$target" ]; then
+        rm "$link"
+        echo "    [INFO] Enlace muerto eliminado: $link"
+    elif [[ "$target" == *"${INACTIVE_PROFILE}_configs"* ]] || [[ "$target" == *"${INACTIVE_PROFILE}_scripts"* ]]; then
+        rm "$link"
+        echo "    [INFO] Enlace de perfil inactivo ($INACTIVE_PROFILE) eliminado: $link"
+    fi
+done < <(find "$TARGET_DIR" "$BIN_TARGET" "$ICONS_TARGET" -type l -print0 2>/dev/null)
 
 echo "--------------------------------------------------------"
 echo "=== DESPLIEGUE FINALIZADO ==="
