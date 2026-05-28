@@ -1,17 +1,17 @@
-@define-color bg #242933;
+@define-color bg rgba(36, 41, 51, 0.85);
 @define-color azul-acero #5e81ac;
 @define-color rojo-critico #bf616a;
 @define-color texto #d8dee9;
 
 * {
-    font-family: "Cinzel", "Serif";
+    font-family: "Inter", "Roboto", sans-serif;
     font-weight: 500;
 }
 
 .notification {
     background-color: @bg;
     border: 2px solid @azul-acero;
-    border-radius: 4px;
+    border-radius: 10px;
     color: @texto;
     margin: 20px;
 }
@@ -38,14 +38,11 @@ image#notification-icon {
     -gtk-icon-size: 0px;
 }
 
-/* --- SOLUCIÓN DE CENTRADO DEFINITIVA --- */
-
-/* Forzamos al contenedor de texto a expandirse para que el centro sea el centro real */
+/* --- SOLUCIÓN DE CENTRADO --- */
 .notification-content .text-wrapper {
     margin: 0px 10px;
     padding: 0px;
-    /* Esto obliga al texto a ocupar el espacio restante y centrar */
-    min-width: 200px; 
+    min-width: 200px;
 }
 
 .summary {
@@ -74,4 +71,51 @@ image#notification-icon {
     background: @azul-acero;
     color: @bg;
     border-radius: 2px;
+}
+
+/* --- HOVER EFFECTS --- */
+.close-button:hover {
+    background: @rojo-critico;
+    color: @texto;
+    transition: all 0.2s ease-in-out;
+}
+.notification-action {
+    background: rgba(94, 129, 172, 0.15); /* @azul-acero transparente */
+    color: @texto;
+    border-radius: 4px;
+    margin: 5px;
+}
+.notification-action:hover {
+    background: @azul-acero;
+    color: @bg;
+    transition: all 0.2s ease-in-out;
+}
+
+/* --- CENTRO DE CONTROL --- */
+.control-center {
+    background-color: @bg;
+    border: 2px solid @azul-acero;
+    border-radius: 10px;
+}
+
+/* Widget Do Not Disturb y Título */
+.widget-title {
+    color: @azul-acero;
+    font-size: 16px;
+    margin: 10px;
+}
+
+.widget-dnd {
+    color: @texto;
+    margin: 10px;
+}
+
+.widget-dnd > switch {
+    background: rgba(36, 41, 51, 0.5);
+    border: 1px solid @azul-acero;
+}
+
+.widget-dnd > switch:checked {
+    background: @rojo-critico;
+    border: 1px solid @rojo-critico;
 }

@@ -8,10 +8,12 @@
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 export EDITOR='nvim'
-export VISUAL='code'
+export VISUAL='nvim'
 alias vi='nvim'
 alias vim='nvim'
-alias zed="zeditor"
+alias zed='zeditor'
+alias fisica='mpv ~/Desktop/Fisica/* </dev/null >/dev/null 2>&1 &! exit'
+alias f1='mpv ~/Desktop/Fisica/* </dev/null >/dev/null 2>&1 &! exit'
 
 export XDG_DATA_DIRS="$XDG_DATA_DIRS:$HOME/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share"
 export PS1="\[\e[36m\]╭─\[\e[34m\][\u@\h] \[\e[32m\]\w\n\[\e[36m\]╰─❯ \[\e[0m\]"

@@ -3,14 +3,14 @@
   "positionX": "right",
   "positionY": "top",
   "layer": "overlay",
-  "control-center-margin-top": 0,
-  "control-center-margin-bottom": 0,
-  "control-center-margin-right": 0,
-  "control-center-margin-left": 0,
+  "control-center-margin-top": 10,
+  "control-center-margin-bottom": 10,
+  "control-center-margin-right": 10,
+  "control-center-margin-left": 10,
   "notification-icon-size": 24,
   "notification-body-image-height": 24,
   "notification-body-image-width": 24,
-  "timeout": 4,
+  "timeout": 3,
   "timeout-low": 2,
   "timeout-critical": 0,
   "fit-to-screen": true,
@@ -21,9 +21,5 @@
   "image-visibility": "always",
   "transition-time": 200,
   "hide-on-clear": false,
-  "widgets": [
-    "title",
-    "dnd",
-    "notifications"
-  ]
+  "widgets": ["title", "dnd", "notifications"]
 }
