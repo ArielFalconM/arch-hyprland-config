@@ -85,6 +85,7 @@ zed
 godot
 
 # --- APLICACIONES DE USUARIO ---
+discord
 obsidian
 steam
 zathura
@@ -104,6 +105,9 @@ xdg-utils
 expac
 
 # --- FUENTES Y TEMAS ---
+noto-fonts
+noto-fonts-emoji
+noto-fonts-cjk
 ttf-jetbrains-mono-nerd
 ttf-nerd-fonts-symbols-common
 otf-font-awesome

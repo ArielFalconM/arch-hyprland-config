@@ -13,8 +13,6 @@
     "custom/separator",
     "clock",
     "custom/separator",
-    "custom/bluetooth",
-    "network",
     "pulseaudio",
     "temperature",
     "memory",
@@ -51,7 +49,7 @@
   },
 
   "clock": {
-    "format": "{:%d %H:%M}",
+    "format": "{:%d/%m | %H:%M}",
     "format-alt": "{:%a, %d %b}",
     "tooltip-format": "<tt>{calendar}</tt>",
     "calendar": {

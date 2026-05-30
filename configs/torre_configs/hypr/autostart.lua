@@ -14,9 +14,9 @@ hl.env("VK_ICD_FILENAMES", "/usr/share/vulkan/icd.d/nvidia_icd.json") -- EL PUEN
 -- Monitores (Monitor por defecto)
 hl.monitor({
     output = "",
-    mode = "preferred",
+    mode = "1920x1080@180hz",
     position = "auto",
-    scale = "1.5"
+    scale = "1"
 })
 
 -- XWayland
