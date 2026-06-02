@@ -103,6 +103,7 @@ unzip
 ntfs-3g
 xdg-utils
 expac
+inotify-tools
 
 # --- FUENTES Y TEMAS ---
 noto-fonts

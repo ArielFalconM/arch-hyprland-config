@@ -8,6 +8,7 @@ overskride
 snixembed-git
 sddm-sugar-candy-git
 wlogout
+localsend-bin
 
 # --- DRIVERS ---
 xone-dkms

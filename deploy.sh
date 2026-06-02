@@ -293,5 +293,23 @@ while IFS= read -r -d '' link; do
     fi
 done < <(find "$TARGET_DIR" "$BIN_TARGET" "$ICONS_TARGET" -type l -print0 2>/dev/null)
 
+# ---------------------------------------------------------
+# FASE 6: HOOKS Y CONTROL DE SERVICIOS
+# ---------------------------------------------------------
+echo -e "\n=== FASE 6: HOOKS Y CONTROL DE SERVICIOS ==="
+if command -v systemctl &>/dev/null; then
+    echo ">> Recargando el administrador de servicios de usuario (systemd)..."
+    systemctl --user daemon-reload
+
+    # Inicializar dinámicamente servicios si fueron desplegados con éxito
+    if [ -f "$TARGET_DIR/systemd/user/obsidian-localsend.service" ]; then
+        echo ">> Detectado: obsidian-localsend.service"
+        echo ">> Habilitando e inicializando servicio de forma idempotente..."
+        systemctl --user enable --now obsidian-localsend.service || echo "    [WARN] No se pudo arrancar el servicio de inmediato. Se activará en el próximo inicio de sesión gráfica."
+    fi
+else
+    echo "    [WARN] systemctl no encontrado en el entorno. Saltando hooks de servicios."
+fi
+
 echo "--------------------------------------------------------"
 echo "=== DESPLIEGUE FINALIZADO ==="
