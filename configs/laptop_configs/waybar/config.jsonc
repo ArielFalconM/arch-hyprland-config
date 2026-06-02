@@ -83,7 +83,7 @@
     "format-ethernet": "󰈀",
     "format-disconnected": "󰖪",
     "tooltip-format": " {essid} ({signalStrength}%)",
-    "on-click": "kitty -e nmtui",
+    "on-click": "kitty --title nmtui -e nmtui",
   },
 
   "temperature": {

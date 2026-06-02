@@ -52,3 +52,40 @@ hl.window_rule({
     float = true,
     size = "900 600"
 })
+
+hl.window_rule({
+    name = "Overskride",
+    match = {
+        class = "^(io.github.kaii_lb.Overskride)$",
+        title = "^(overskride)$"
+    },
+    float = true,
+    size = "550 650",
+    move = "900 150",
+    workspace = "current"
+})
+
+hl.window_rule({
+    name = "nmtui",
+    match = {
+        class = "^(kitty)$",
+        title = "^(nmtui)$",
+        initial_title = "^(nmtui)$"
+    },
+    float = true,
+    size = "550 650",
+    move = "900 150",
+    workspace = "current"
+})
+
+hl.window_rule({
+    name = "pavucontrol",
+    match = {
+        class = "^(org.pulseaudio.pavucontrol)$",
+        title = "^(Volume Control)$"
+    },
+    float = true,
+    size = "550 650",
+    move = "900 150",
+    workspace = "current"
+})
