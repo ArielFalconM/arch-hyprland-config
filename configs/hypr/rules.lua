@@ -11,6 +11,11 @@ hl.layer_rule({
     ignore_alpha = 0.1
 })
 
+hl.layer_rule({
+    match = { namespace = "selection" },
+    no_anim = true
+})
+
 
 -- REGLAS DE VENTANAS (WINDOW RULES)
 

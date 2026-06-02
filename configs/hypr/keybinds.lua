@@ -25,17 +25,18 @@ hl.bind(mainMod .. " + P", hl.dsp.exec_cmd("pkill -x wlogout || wlogout -b 4"))
 hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("loginctl lock-session"))
 hl.bind(mainMod .. " + M", hl.dsp.exit())
 
--- Captura de pantalla
+-- Restauramos los colores de slurp (fondo oscuro, borde blanco de 2px)
 hl.bind(mainMod .. " + SHIFT + S",
-    hl.dsp.exec_cmd('grim -g "$(slurp)" - | tee ~/Pictures/Screenshots/$(date +\'%Y-%m-%d_%H-%M-%S.png\') | wl-copy'))
--- Captura de pantalla con la tecla PrtSc
+    hl.dsp.exec_cmd(
+    [[sh -c 'GEOM=$(slurp -b 00000044 -c ffffffff -w 2) && sleep 0.2 && grim -g "$GEOM" - | tee ~/Pictures/Screenshots/$(date +"%Y-%m-%d_%H-%M-%S.png") | wl-copy']]))
+
 hl.bind("Print",
-    hl.dsp.exec_cmd([[grim -g "$(slurp)" - | tee ~/Pictures/Screenshots/$(date +'%Y-%m-%d_%H-%M-%S.png') | wl-copy]]))
+    hl.dsp.exec_cmd(
+        [[sh -c 'GEOM=$(slurp -b 00000044 -c ffffffff -w 2) && sleep 0.2 && grim -g "$GEOM" - | tee ~/Pictures/Screenshots/$(date +"%Y-%m-%d_%H-%M-%S.png") | wl-copy']]))
 
 
 
 -- GESTIÓN DE VENTANAS
-
 
 hl.bind(mainMod .. " + C", hl.dsp.window.close())
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
