@@ -29,9 +29,9 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("waybar")
     hl.exec_cmd("hypridle")
     hl.exec_cmd("swaync -c ~/.config/swaync/config.json -s ~/.config/swaync/style.css")
+    hl.exec_cmd("sleep 5 && ~/.local/bin/zettel_pull.sh")
 
     -- Notificadores
-    hl.exec_cmd("~/.local/bin/zettel_pull.sh")
     hl.exec_cmd(" ~/.local/bin/spotify_notify.sh &")
     hl.exec_cmd("~/.local/bin/usb_notify.sh &")
     hl.exec_cmd("~/.local/bin/wifi_notify.sh &")

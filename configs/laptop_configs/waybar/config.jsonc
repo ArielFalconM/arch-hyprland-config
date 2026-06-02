@@ -51,7 +51,7 @@
   },
 
   "clock": {
-    "format": "{:%d %H:%M}",
+    "format": "{:%d/%m | %H:%M}",
     "format-alt": "{:%a, %d %b}",
     "tooltip-format": "<tt>{calendar}</tt>",
     "calendar": {
@@ -113,8 +113,8 @@
     "interval": 2,
     "exec": "bluetoothctl show | grep -q 'Powered: yes' && ([ $(bluetoothctl devices Connected | wc -l) -gt 0 ] && echo '{\"text\": \"󰋋\", \"class\": \"connected\"}' || echo '{\"text\": \"\", \"class\": \"enabled\"}') || echo '{\"text\": \"󰂲\", \"class\": \"disabled\"}'",
     "return-type": "json",
-    "on-click": "rfkill unblock bluetooth && sleep 0.1 && (bluetoothctl show | grep -q 'Powered: yes' && bluetoothctl power off || bluetoothctl power on)",
-    "on-click-right": "overskride &",
+    "on-click-right": "rfkill unblock bluetooth && sleep 0.1 && (bluetoothctl show | grep -q 'Powered: yes' && bluetoothctl power off || bluetoothctl power on)",
+    "on-click": "overskride &",
     "tooltip": false,
   },
 
