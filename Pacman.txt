@@ -80,7 +80,6 @@ jq
 
 # --- EDITORES Y DESARROLLO ---
 neovim
-code
 zed
 godot
 

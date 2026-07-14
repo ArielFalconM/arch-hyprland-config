@@ -15,7 +15,7 @@
   "buffer_font_family": "JetBrainsMono Nerd Font",
 
   // Comportamiento Core
-  "autosave": "on_focus_change",
+  "autosave": "on_window_change",
   "format_on_save": "on",
   "vim_mode": false,
 

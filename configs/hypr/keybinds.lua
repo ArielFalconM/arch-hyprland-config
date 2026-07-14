@@ -28,7 +28,7 @@ hl.bind(mainMod .. " + M", hl.dsp.exit())
 -- Restauramos los colores de slurp (fondo oscuro, borde blanco de 2px)
 hl.bind(mainMod .. " + SHIFT + S",
     hl.dsp.exec_cmd(
-    [[sh -c 'GEOM=$(slurp -b 00000044 -c ffffffff -w 2) && sleep 0.2 && grim -g "$GEOM" - | tee ~/Pictures/Screenshots/$(date +"%Y-%m-%d_%H-%M-%S.png") | wl-copy']]))
+        [[sh -c 'GEOM=$(slurp -b 00000044 -c ffffffff -w 2) && sleep 0.2 && grim -g "$GEOM" - | tee ~/Pictures/Screenshots/$(date +"%Y-%m-%d_%H-%M-%S.png") | wl-copy']]))
 
 hl.bind("Print",
     hl.dsp.exec_cmd(

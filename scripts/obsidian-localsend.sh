@@ -17,7 +17,7 @@ inotifywait -m -e close_write,moved_to --format "%f" "$WATCH_DIR" | while read -
         pkill -P $$ sleep 2>/dev/null
 
         (
-            sleep 0.5 # Espera para agrupar las transferencias múltiples
+            sleep 2 # Espera para agrupar las transferencias múltiples
             if [ -s "$BUFFER" ]; then
                 # Copia del contenido al portapapeles y vaciado el buffer
                 wl-copy < "$BUFFER"

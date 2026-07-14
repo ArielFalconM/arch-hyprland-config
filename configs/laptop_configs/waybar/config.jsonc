@@ -79,9 +79,10 @@
   },
 
   "network": {
+    "interface": "wlan0",
     "format-wifi": " ",
     "format-ethernet": "󰈀",
-    "format-disconnected": "󰖪",
+    "format-disconnected": " ",
     "tooltip-format": " {essid} ({signalStrength}%)",
     "on-click": "kitty --title nmtui -e nmtui",
   },
