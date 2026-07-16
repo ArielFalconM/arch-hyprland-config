@@ -13,9 +13,7 @@ BIN_TARGET="$HOME/.local/bin"
 ICONS_DIR="$REPO_ROOT/icons"
 ICONS_TARGET="$HOME/.local/share/icons"
 
-# Configuración para imágenes y sistema
-WALLPAPERS_DIR="$REPO_ROOT/wallpapers"
-WALLPAPER_TARGET="$HOME/.local/share/wallpapers"
+# Configuración para sistema
 SYSTEM_DIR="$REPO_ROOT/system"
 
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
@@ -194,33 +192,19 @@ if [ -d "$SCRIPTS_DIR" ]; then
 fi
 
 # ---------------------------------------------------------
-# FASE 3: DESPLIEGUE DE WALLPAPERS (~/.local/share/wallpapers)
+# PREPARACIÓN DE CARPETAS DE USUARIO
 # ---------------------------------------------------------
-
-# PREPARACIÓN DE CARPETAS DE USUARIO:
 echo -e "\n=== VERIFICANDO DIRECTORIOS BASE ==="
 SCREENSHOTS_DIR="$HOME/Pictures/Screenshots"
 
 mkdir -p "$SCREENSHOTS_DIR"
 echo "    [INFO] Directorio de capturas asegurado en $SCREENSHOTS_DIR"
 
-if [ -d "$WALLPAPERS_DIR" ]; then
-    echo -e "\n=== FASE 3: INYECTANDO WALLPAPERS ==="
-    mkdir -p "$WALLPAPER_TARGET"
-
-    while IFS= read -r -d '' wp; do
-        base_name=$(basename "$wp")
-        backup_if_real "$WALLPAPER_TARGET/$base_name"
-        ln -sf "$wp" "$WALLPAPER_TARGET/$base_name"
-        echo "    [INFO] Imagen vinculada con éxito."
-    done < <(find "$WALLPAPERS_DIR" -mindepth 1 -maxdepth 1 -type f -print0)
-fi
-
 # ---------------------------------------------------------
-# FASE 3.5: DESPLIEGUE DE ICONOS (~/.local/share/icons)
+# FASE 3: DESPLIEGUE DE ICONOS (~/.local/share/icons)
 # ---------------------------------------------------------
 if [ -d "$ICONS_DIR" ]; then
-    echo -e "\n=== FASE 3.5: INYECTANDO ICONOS ==="
+    echo -e "\n=== FASE 3: INYECTANDO ICONOS ==="
     mkdir -p "$ICONS_TARGET"
 
     while IFS= read -r -d '' icon; do
