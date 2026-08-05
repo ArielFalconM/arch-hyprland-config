@@ -89,3 +89,14 @@ hl.window_rule({
     move = "900 150",
     workspace = "current"
 })
+
+hl.window_rule({
+    name = "obsSettings",
+    match = {
+        class = "^(md.Obsidian)$",
+        title = "^(Settings - Zettel.*)$"
+    },
+    float = true,
+    size = "650 794",
+    workspace = "current"
+})

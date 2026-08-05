@@ -14,6 +14,8 @@ alias vim='nvim'
 alias zed='zeditor'
 alias fisica='mpv ~/Desktop/Fisica/* </dev/null >/dev/null 2>&1 &! exit'
 alias f1='mpv ~/Desktop/Fisica/* </dev/null >/dev/null 2>&1 &! exit'
+alias syu='sudo pacman -Syu'
+alias ubuntu='ssh ariel@192.168.1.30'
 
 export XDG_DATA_DIRS="$XDG_DATA_DIRS:$HOME/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share"
 export PS1="\[\e[36m\]╭─\[\e[34m\][\u@\h] \[\e[32m\]\w\n\[\e[36m\]╰─❯ \[\e[0m\]"

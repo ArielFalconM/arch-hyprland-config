@@ -7,7 +7,7 @@
   "reload_style_on_change": true,
 
   "modules-center": [
-    "hyprland/workspaces",
+    "hyprland/workspaces", //Cambiando hyprland por ext se arregla el on-click
     "custom/separator",
     "custom/mpris",
     "custom/separator",
@@ -23,6 +23,7 @@
   ],
 
   "hyprland/workspaces": {
+    //Cambiando hyprland por ext se arregla el on-click
     "format": "{icon}",
     "on-click": "activate",
     "all-outputs": true,
