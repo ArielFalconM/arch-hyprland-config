@@ -37,10 +37,6 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("gnome-keyring-daemon --start --components=secrets")         --Llavero
     hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1") --gente de autenticación
 
-    --Aplicaciones
-    hl.exec_cmd("spotify silent")
-
-
     -- Notificadores
     hl.exec_cmd("sleep 5 && swaync -c ~/.config/swaync/config.json -s ~/.config/swaync/style.css") --Notificaciones
     hl.exec_cmd(" ~/.local/bin/spotify_notify.sh &")
