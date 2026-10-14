@@ -1,5 +1,8 @@
 // Zed settings
 {
+  "edit_predictions": {
+    "mode": "subtle"
+  },
   "cli_default_open_behavior": "new_window",
   "when_closing_with_no_tabs": "keep_window_open",
 
